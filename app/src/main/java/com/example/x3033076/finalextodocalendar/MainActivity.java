@@ -1,5 +1,6 @@
 package com.example.x3033076.finalextodocalendar;
 
+import android.content.Intent;
 import android.os.Bundle;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -29,10 +30,12 @@ public class MainActivity extends AppCompatActivity {
         TabLayout tabs = findViewById(R.id.tabs);
         tabs.setupWithViewPager(viewPager);
         FloatingActionButton fab = findViewById(R.id.addFab);
+        final Intent intent = new Intent(this, AddToDo.class);
 
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                /*
                 now = new Date();
                 month = now.getMonth() + 1;
                 day = now.getDate();
@@ -41,6 +44,10 @@ public class MainActivity extends AppCompatActivity {
                 second = now.getSeconds();
 
                 ToDoList.adapter.add(month+"/"+day+" "+ String.format("%02d",hour) +":"+ String.format("%02d",minute) +":"+ String.format("%02d",second) +" プログラミング実践");
+                */
+
+
+                startActivity(intent);
             }
         });
     }
