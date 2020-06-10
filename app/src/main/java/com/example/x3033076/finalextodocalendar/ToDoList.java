@@ -19,7 +19,9 @@ public class ToDoList extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater,
                              @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
+
         tdRootView = inflater.inflate(R.layout.todo_list_layout, container, false);
+
         return tdRootView;
     }
 }
