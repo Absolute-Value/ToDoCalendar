@@ -17,9 +17,6 @@ import java.util.Date;
 
 public class MainActivity extends AppCompatActivity {
 
-    Date now;
-    int month, day, hour, minute, second;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -35,18 +32,6 @@ public class MainActivity extends AppCompatActivity {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                /*
-                now = new Date();
-                month = now.getMonth() + 1;
-                day = now.getDate();
-                hour = now.getHours();
-                minute = now.getMinutes();
-                second = now.getSeconds();
-
-                ToDoList.adapter.add(month+"/"+day+" "+ String.format("%02d",hour) +":"+ String.format("%02d",minute) +":"+ String.format("%02d",second) +" プログラミング実践");
-                */
-
-
                 startActivity(intent);
             }
         });
