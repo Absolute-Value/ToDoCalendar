@@ -11,7 +11,7 @@
     <string name="thursday">木</string>
     <string name="friday">金</string>
     <string name="saturday">土</string>
-    <string name="todo_name">ToDo名</string>
+    <string name="todo_title">ToDo名</string>
     <string name="deadline">締切日</string>
     <string name="memo">メモ</string>
     <string name="cancel">キャンセル</string>

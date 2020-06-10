@@ -11,11 +11,11 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/todo_name"
+            android:text="@string/todo_title"
             android:gravity="center"/>
 
         <EditText
-            android:id="@+id/toDoNameTV"
+            android:id="@+id/toDoTitleTV"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="5dp"
@@ -42,7 +42,8 @@
                 android:background="@color/colorPrimary"
                 android:textColor="@color/colorWhite"
                 android:textSize="25dp"
-                android:text="2020/11/20"/>
+                android:text="2020/11/20"
+                android:onClick="showDatePickerDialog"/>
 
             <Button
                 android:id="@+id/timeBtn"
@@ -54,7 +55,8 @@
                 android:background="@color/colorPrimary"
                 android:textColor="@color/colorWhite"
                 android:textSize="25dp"
-                android:text="13:50"/>
+                android:text="13:50"
+                android:onClick="showTimePickerDialog"/>
 
         </LinearLayout>
 
@@ -64,6 +66,7 @@
             android:text="@string/memo"/>
 
         <EditText
+            android:id="@+id/memoTV"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="1"
