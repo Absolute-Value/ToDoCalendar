@@ -3,19 +3,21 @@ package com.example.x3033076.finalextodocalendar;
 import android.os.Bundle;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.tabs.TabLayout;
 
 import androidx.viewpager.widget.ViewPager;
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 
 import com.example.x3033076.finalextodocalendar.ui.main.SectionsPagerAdapter;
 
+import java.util.Date;
+
 public class MainActivity extends AppCompatActivity {
+
+    Date now;
+    int month, day, hour, minute, second;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,8 +33,14 @@ public class MainActivity extends AppCompatActivity {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
+                now = new Date();
+                month = now.getMonth() + 1;
+                day = now.getDate();
+                hour = now.getHours();
+                minute = now.getMinutes();
+                second = now.getSeconds();
+
+                ToDoList.adapter.add(month+"/"+day+" "+ String.format("%02d",hour) +":"+ String.format("%02d",minute) +":"+ String.format("%02d",second) +" プログラミング実践");
             }
         });
     }
