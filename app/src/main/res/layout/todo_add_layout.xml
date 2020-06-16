@@ -66,7 +66,7 @@
             android:text="@string/memo"/>
 
         <EditText
-            android:id="@+id/memoTV"
+            android:id="@+id/toDoMemoTV"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="1"

@@ -30,7 +30,7 @@ public class AddToDo extends FragmentActivity implements View.OnClickListener, D
         toDoTitleTextView = findViewById(R.id.toDoTitleTV);
         dateButton = findViewById(R.id.dateBtn);
         timeButton = findViewById(R.id.timeBtn);
-        memoTextView = findViewById(R.id.memoTV);
+        memoTextView = findViewById(R.id.toDoMemoTV);
         cancelButton = findViewById(R.id.cancelBtn);
         addButton = findViewById(R.id.addBtn);
 
@@ -42,7 +42,7 @@ public class AddToDo extends FragmentActivity implements View.OnClickListener, D
 
         now = new Date();
         year = now.getYear()+1900;
-        month = now.getMonth();
+        month = now.getMonth()+1;
         day = now.getDate();
         hour = now.getHours();
         minute = now.getMinutes();
