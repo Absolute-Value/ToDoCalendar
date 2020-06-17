@@ -17,15 +17,15 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
 import java.util.ArrayList;
-import java.util.List;
 
 public class ToDoList extends Fragment implements View.OnClickListener {
 
     static ListView list;
     Button finishButton, editButton, deleteButton;
-    TextView toDoTitle;
+    TextView toDoTitle, toDoDeadline, toDoMemo;
 
     String getTitle = "";
+    String getId;
 
     private DBAdapter dbAdapter;                // DBAdapter
     private ArrayAdapter<String> adapter;       // ArrayAdapter
@@ -42,6 +42,8 @@ public class ToDoList extends Fragment implements View.OnClickListener {
 
         list = (ListView) tdRootView.findViewById(R.id.toDoLV);
         toDoTitle = (TextView) tdRootView.findViewById(R.id.titleTV);
+        toDoDeadline = (TextView) tdRootView.findViewById(R.id.deadLineTV);
+        toDoMemo = (TextView) tdRootView.findViewById(R.id.memoTV);
         finishButton = (Button) tdRootView.findViewById(R.id.finBtn);
         editButton = (Button) tdRootView.findViewById(R.id.editBtn);
         deleteButton = (Button) tdRootView.findViewById(R.id.delBtn);
@@ -51,14 +53,19 @@ public class ToDoList extends Fragment implements View.OnClickListener {
         editButton.setOnClickListener(this);
         deleteButton.setOnClickListener(this);
 
-        dbAdapter = new DBAdapter(getActivity());
-        dbAdapter.openDB();     // DBの読み込み(読み書きの方)
+        listUpdate();
 
-        // ArrayListを生成
-        items = new ArrayList<>();
+        return tdRootView;
+    }
+
+    void listUpdate() {
+        dbAdapter = new DBAdapter(getActivity());
+        dbAdapter.openDB(); // DBの読み込み(読み書きの方)
+
+        items = new ArrayList<>(); // ArrayListを生成
 
         // DBのデータを取得
-        String[] columns = {DBAdapter.COL_TITLE};     // DBのカラム：品名
+        String[] columns = {DBAdapter.COL_TITLE}; // DBのカラム：ToDo名
         Cursor c = dbAdapter.getDB(columns);
 
         if (c.moveToFirst()) {
@@ -68,27 +75,27 @@ public class ToDoList extends Fragment implements View.OnClickListener {
             } while (c.moveToNext());
         }
         c.close();
-        dbAdapter.closeDB();    // DBを閉じる
+        dbAdapter.closeDB(); // DBを閉じる
 
         adapter = new ArrayAdapter<String>
                 (getActivity(), android.R.layout.simple_list_item_1, items);
 
 
         list.setAdapter(adapter); //ListViewにアダプターをセット(=表示)
-
-        return tdRootView;
     }
 
     private class ListItemClickListener implements AdapterView.OnItemClickListener {
 
         @Override
         public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
-            getTitle = (String) adapterView.getItemAtPosition(position);
-            toDoTitle.setText(getTitle);
-
-            finishButton.setEnabled(true);
-            editButton.setEnabled(true);
-            deleteButton.setEnabled(true);
+            dbAdapter.openDB();
+            String[] columns = {DBAdapter.COL_ID, DBAdapter.COL_TITLE, DBAdapter.COL_DEADLINE, DBAdapter.COL_MEMO}; // DBのカラム：ToDo名
+            Cursor c = dbAdapter.getDB(columns);
+            c.move(position+1);
+            getId = c.getString(0);
+            init(c.getString(1),c.getString(2),c.getString(3),true);
+            c.close();
+            dbAdapter.closeDB();
         }
     }
 
@@ -96,11 +103,24 @@ public class ToDoList extends Fragment implements View.OnClickListener {
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.finBtn:
+            case R.id.delBtn:
+                dbAdapter.openDB();
+                dbAdapter.selectDelete(String.valueOf(getId));
+                dbAdapter.closeDB();
+                init("","","",false);
+                listUpdate();
                 break;
             case R.id.editBtn:
                 break;
-            case R.id.delBtn:
-                break;
         }
+    }
+
+    void init(String titleText, String deadlineText, String memoText, boolean bool) {
+        toDoTitle.setText(titleText);
+        toDoDeadline.setText(deadlineText);
+        toDoMemo.setText(memoText);
+        finishButton.setEnabled(bool);
+        editButton.setEnabled(bool);
+        deleteButton.setEnabled(bool);
     }
 }

@@ -74,15 +74,11 @@ public class AddToDo extends FragmentActivity implements View.OnClickListener, D
                     DBAdapter dbAdapter = new DBAdapter(this);
                     dbAdapter.openDB();
                     dbAdapter.saveDB(title, deadline, memo);
-                    dbAdapter.closeDB();
-                    dbAdapter = new DBAdapter(this);
-                    dbAdapter.openDB();     // DBの読み込み(読み書きの方)
 
-                    // ArrayListを生成
-                    items = new ArrayList<>();
+                    items = new ArrayList<>(); // ArrayListを生成
 
                     // DBのデータを取得
-                    String[] columns = {DBAdapter.COL_TITLE};     // DBのカラム：品名
+                    String[] columns = {DBAdapter.COL_TITLE}; // DBのカラム：ToDo名
                     Cursor c = dbAdapter.getDB(columns);
 
                     if (c.moveToFirst()) {
@@ -92,7 +88,7 @@ public class AddToDo extends FragmentActivity implements View.OnClickListener, D
                         } while (c.moveToNext());
                     }
                     c.close();
-                    dbAdapter.closeDB();    // DBを閉じる
+                    dbAdapter.closeDB(); // DBを閉じる
 
                     adapter = new ArrayAdapter<String>
                             (this, android.R.layout.simple_list_item_1, items);

@@ -65,6 +65,19 @@ public class DBAdapter {
         return db.query(DB_TABLE, columns, null, null, null, null, COL_DEADLINE);
     }
 
+    public void selectDelete(String position) {
+
+        db.beginTransaction(); // トランザクション開始
+        try {
+            db.delete(DB_TABLE, COL_ID + "=?", new String[]{position});
+            db.setTransactionSuccessful();          // トランザクションへコミット
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            db.endTransaction(); // トランザクションの終了
+        }
+    }
+
     private class DBHelper extends SQLiteOpenHelper {
 
         public DBHelper(Context context) {
@@ -77,7 +90,7 @@ public class DBAdapter {
                     + COL_ID + " INTEGER PRIMARY KEY,"
                     + COL_TITLE + " TEXT NOT NULL,"
                     + COL_DEADLINE + " TEXT NOT NULL,"
-                    + COL_MEMO + " TEXT"
+                    + COL_MEMO + " TEXT NOT NULL"
                     + ");";
 
             db.execSQL(createTbl); //SQL文の実行
