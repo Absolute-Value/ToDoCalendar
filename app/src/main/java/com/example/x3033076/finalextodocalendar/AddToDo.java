@@ -2,17 +2,22 @@ package com.example.x3033076.finalextodocalendar;
 
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
+import android.database.Cursor;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.TextView;
 import android.widget.TimePicker;
+import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.FragmentActivity;
 
+import java.util.ArrayList;
 import java.util.Date;
 
 public class AddToDo extends FragmentActivity implements View.OnClickListener, DatePickerDialog.OnDateSetListener, TimePickerDialog.OnTimeSetListener {
@@ -21,6 +26,10 @@ public class AddToDo extends FragmentActivity implements View.OnClickListener, D
     Button dateButton, timeButton, cancelButton, addButton;
     Date now;
     int year, month, day, hour, minute;
+
+    private DBAdapter dbAdapter;                // DBAdapter
+    private ArrayAdapter<String> adapter;       // ArrayAdapter
+    private ArrayList<String> items;            // ArrayList
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -54,8 +63,43 @@ public class AddToDo extends FragmentActivity implements View.OnClickListener, D
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.addBtn:
-                ToDoList.adapter.add("["+year+"年"+month+"月"+day+"日"+
-                        hour+":"+String.format("%02d",minute)+"] "+String.valueOf(toDoTitleTextView.getText()));
+                // ToDoList.adapter.add("["+year+"年"+month+"月"+day+"日"+ hour+":"+String.format("%02d",minute)+"] "+String.valueOf(toDoTitleTextView.getText()));
+                String title = toDoTitleTextView.getText().toString();
+                String deadline = String.format("%04d",year) + String.format("%02d",month) + String.format("%02d",day)
+                        + String.format("%02d",hour) + String.format("%02d",minute);
+                String memo = memoTextView.getText().toString();
+                if (title.equals("")) {
+                    Toast.makeText(AddToDo.this, "タイトルを入力してください", Toast.LENGTH_SHORT).show();
+                } else {
+                    DBAdapter dbAdapter = new DBAdapter(this);
+                    dbAdapter.openDB();
+                    dbAdapter.saveDB(title, deadline, memo);
+                    dbAdapter.closeDB();
+                    dbAdapter = new DBAdapter(this);
+                    dbAdapter.openDB();     // DBの読み込み(読み書きの方)
+
+                    // ArrayListを生成
+                    items = new ArrayList<>();
+
+                    // DBのデータを取得
+                    String[] columns = {DBAdapter.COL_TITLE};     // DBのカラム：品名
+                    Cursor c = dbAdapter.getDB(columns);
+
+                    if (c.moveToFirst()) {
+                        do {
+                            items.add(c.getString(0));
+                            Log.d("取得したCursor:", c.getString(0));
+                        } while (c.moveToNext());
+                    }
+                    c.close();
+                    dbAdapter.closeDB();    // DBを閉じる
+
+                    adapter = new ArrayAdapter<String>
+                            (this, android.R.layout.simple_list_item_1, items);
+                    ToDoList.list.setAdapter(adapter);
+                    finish(); // このアクティビティを終了させる
+                }
+                break;
             case R.id.cancelBtn:
                 finish(); // このアクティビティを終了させる
                 break;

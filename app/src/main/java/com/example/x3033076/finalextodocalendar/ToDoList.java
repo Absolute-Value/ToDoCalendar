@@ -1,6 +1,8 @@
 package com.example.x3033076.finalextodocalendar;
 
+import android.database.Cursor;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,14 +21,15 @@ import java.util.List;
 
 public class ToDoList extends Fragment implements View.OnClickListener {
 
-    ListView list;
+    static ListView list;
     Button finishButton, editButton, deleteButton;
     TextView toDoTitle;
 
     String getTitle = "";
 
-    static List<String> dataList = new ArrayList<String>();
-    static ArrayAdapter<String> adapter;
+    private DBAdapter dbAdapter;                // DBAdapter
+    private ArrayAdapter<String> adapter;       // ArrayAdapter
+    private ArrayList<String> items;            // ArrayList
 
     private View tdRootView;
     @Nullable
@@ -48,13 +51,30 @@ public class ToDoList extends Fragment implements View.OnClickListener {
         editButton.setOnClickListener(this);
         deleteButton.setOnClickListener(this);
 
-        adapter =
-                new ArrayAdapter<String>(
-                        getActivity(),
-                        android.R.layout.simple_list_item_1,
-                        dataList);
+        dbAdapter = new DBAdapter(getActivity());
+        dbAdapter.openDB();     // DBの読み込み(読み書きの方)
 
-        list.setAdapter(adapter);
+        // ArrayListを生成
+        items = new ArrayList<>();
+
+        // DBのデータを取得
+        String[] columns = {DBAdapter.COL_TITLE};     // DBのカラム：品名
+        Cursor c = dbAdapter.getDB(columns);
+
+        if (c.moveToFirst()) {
+            do {
+                items.add(c.getString(0));
+                Log.d("取得したCursor:", c.getString(0));
+            } while (c.moveToNext());
+        }
+        c.close();
+        dbAdapter.closeDB();    // DBを閉じる
+
+        adapter = new ArrayAdapter<String>
+                (getActivity(), android.R.layout.simple_list_item_1, items);
+
+
+        list.setAdapter(adapter); //ListViewにアダプターをセット(=表示)
 
         return tdRootView;
     }
