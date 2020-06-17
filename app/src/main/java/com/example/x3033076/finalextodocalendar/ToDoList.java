@@ -2,14 +2,13 @@ package com.example.x3033076.finalextodocalendar;
 
 import android.database.Cursor;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
+import android.widget.SimpleAdapter;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -17,18 +16,20 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 public class ToDoList extends Fragment implements View.OnClickListener {
 
-    static ListView list;
+    static ListView listV;
     Button finishButton, editButton, deleteButton;
     TextView toDoDate, toDoTitle, toDoTime, toDoMemo;
 
     String getId, getDate, getTime;
 
-    private DBAdapter dbAdapter;                // DBAdapter
-    private ArrayAdapter<String> adapter;       // ArrayAdapter
-    private ArrayList<String> items;            // ArrayList
+    private DBAdapter dbAdapter; // DBAdapter
+    private List<Map<String,Object>> list = new ArrayList<>();
 
     private View tdRootView;
     @Nullable
@@ -39,7 +40,7 @@ public class ToDoList extends Fragment implements View.OnClickListener {
 
         tdRootView = inflater.inflate(R.layout.todo_list_layout, container, false);
 
-        list = (ListView) tdRootView.findViewById(R.id.toDoLV);
+        listV = (ListView) tdRootView.findViewById(R.id.toDoLV);
         toDoDate = (TextView) tdRootView.findViewById(R.id.dateTV);
         toDoTitle = (TextView) tdRootView.findViewById(R.id.titleTV);
         toDoTime = (TextView) tdRootView.findViewById(R.id.timeTV);
@@ -48,7 +49,7 @@ public class ToDoList extends Fragment implements View.OnClickListener {
         editButton = (Button) tdRootView.findViewById(R.id.editBtn);
         deleteButton = (Button) tdRootView.findViewById(R.id.delBtn);
 
-        list.setOnItemClickListener(new ListItemClickListener());
+        listV.setOnItemClickListener(new ListItemClickListener());
         finishButton.setOnClickListener(this);
         editButton.setOnClickListener(this);
         deleteButton.setOnClickListener(this);
@@ -62,26 +63,25 @@ public class ToDoList extends Fragment implements View.OnClickListener {
         dbAdapter = new DBAdapter(getActivity());
         dbAdapter.openDB(); // DBの読み込み(読み書きの方)
 
-        items = new ArrayList<>(); // ArrayListを生成
-
         // DBのデータを取得
-        String[] columns = {DBAdapter.COL_TITLE}; // DBのカラム：ToDo名
+        String[] columns = {DBAdapter.COL_TITLE, DBAdapter.COL_DEADLINE}; // DBのカラム：ToDo名
         Cursor c = dbAdapter.getDB(columns);
 
         if (c.moveToFirst()) {
             do {
-                items.add(c.getString(0));
-                Log.d("取得したCursor:", c.getString(0));
+                Map<String,Object> map = new HashMap<>();
+                map.put("title", c.getString(0));
+                map.put("date", c.getString(1).substring(4,6) + "月" + c.getString(1).substring(6,8) +"日");
+                map.put("time", c.getString(1).substring(8,10) + ":" + c.getString(1).substring(10,12));
+                list.add(map);
             } while (c.moveToNext());
         }
         c.close();
         dbAdapter.closeDB(); // DBを閉じる
 
-        adapter = new ArrayAdapter<String>
-                (getActivity(), android.R.layout.simple_list_item_1, items);
-
-
-        list.setAdapter(adapter); //ListViewにアダプターをセット(=表示)
+        SimpleAdapter adapter = new SimpleAdapter(getActivity(),
+                list,R.layout.list_layout,new String[] {"title", "date", "time"},new int[] {R.id.listTitleTV, R.id.listDateTV, R.id.listTimeTV});
+        listV.setAdapter(adapter); //ListViewにアダプターをセット(=表示)
     }
 
     private class ListItemClickListener implements AdapterView.OnItemClickListener {
@@ -89,7 +89,7 @@ public class ToDoList extends Fragment implements View.OnClickListener {
         @Override
         public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
             dbAdapter.openDB();
-            String[] columns = {DBAdapter.COL_ID, DBAdapter.COL_TITLE, DBAdapter.COL_DEADLINE, DBAdapter.COL_MEMO}; // DBのカラム：ToDo名
+            String[] columns = {DBAdapter.COL_ID, DBAdapter.COL_TITLE, DBAdapter.COL_DEADLINE, DBAdapter.COL_MEMO}; // DBのカラム：ID, ToDo名, 期限, メモ
             Cursor c = dbAdapter.getDB(columns);
             c.move(position+1);
             getId = c.getString(0);

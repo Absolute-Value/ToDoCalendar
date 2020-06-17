@@ -4,11 +4,10 @@ import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
 import android.database.Cursor;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.DatePicker;
+import android.widget.SimpleAdapter;
 import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
@@ -19,6 +18,9 @@ import androidx.fragment.app.FragmentActivity;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 public class AddToDo extends FragmentActivity implements View.OnClickListener, DatePickerDialog.OnDateSetListener, TimePickerDialog.OnTimeSetListener {
 
@@ -27,9 +29,7 @@ public class AddToDo extends FragmentActivity implements View.OnClickListener, D
     Date now;
     int year, month, day, hour, minute;
 
-    private DBAdapter dbAdapter;                // DBAdapter
-    private ArrayAdapter<String> adapter;       // ArrayAdapter
-    private ArrayList<String> items;            // ArrayList
+    private ArrayList<Map<String,Object>> list = new ArrayList<>();
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -63,7 +63,6 @@ public class AddToDo extends FragmentActivity implements View.OnClickListener, D
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.addBtn:
-                // ToDoList.adapter.add("["+year+"年"+month+"月"+day+"日"+ hour+":"+String.format("%02d",minute)+"] "+String.valueOf(toDoTitleTextView.getText()));
                 String title = toDoTitleTextView.getText().toString();
                 String deadline = String.format("%04d",year) + String.format("%02d",month) + String.format("%02d",day)
                         + String.format("%02d",hour) + String.format("%02d",minute);
@@ -75,24 +74,26 @@ public class AddToDo extends FragmentActivity implements View.OnClickListener, D
                     dbAdapter.openDB();
                     dbAdapter.saveDB(title, deadline, memo);
 
-                    items = new ArrayList<>(); // ArrayListを生成
-
                     // DBのデータを取得
-                    String[] columns = {DBAdapter.COL_TITLE}; // DBのカラム：ToDo名
+                    String[] columns = {DBAdapter.COL_TITLE, DBAdapter.COL_DEADLINE}; // DBのカラム：ToDo名
                     Cursor c = dbAdapter.getDB(columns);
 
                     if (c.moveToFirst()) {
                         do {
-                            items.add(c.getString(0));
-                            Log.d("取得したCursor:", c.getString(0));
+                            Map<String,Object> map = new HashMap<>();
+                            map.put("title", c.getString(0));
+                            map.put("date", c.getString(1).substring(4,6) + "月" + c.getString(1).substring(6,8) +"日("+")");
+                            map.put("time", c.getString(1).substring(8,10) + ":" + c.getString(1).substring(10,12));
+                            list.add(map);
                         } while (c.moveToNext());
                     }
                     c.close();
                     dbAdapter.closeDB(); // DBを閉じる
 
-                    adapter = new ArrayAdapter<String>
-                            (this, android.R.layout.simple_list_item_1, items);
-                    ToDoList.list.setAdapter(adapter);
+                    SimpleAdapter adapter = new SimpleAdapter(this,
+                            list,R.layout.list_layout,new String[] {"title", "date", "time"},new int[] {R.id.listTitleTV, R.id.listDateTV, R.id.listTimeTV});
+                    ToDoList.listV.setAdapter(adapter); //ListViewにアダプターをセット(=表示)
+
                     finish(); // このアクティビティを終了させる
                 }
                 break;
