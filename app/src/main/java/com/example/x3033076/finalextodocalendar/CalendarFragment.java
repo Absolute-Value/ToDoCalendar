@@ -9,7 +9,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
-public class Calendar extends Fragment {
+public class CalendarFragment extends Fragment {
 
     private View clRootView;
     @Nullable

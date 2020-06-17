@@ -16,17 +16,19 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class ToDoList extends Fragment implements View.OnClickListener {
+public class ToDoListFragment extends Fragment implements View.OnClickListener {
 
     static ListView listV;
     Button finishButton, editButton, deleteButton;
     TextView toDoDate, toDoTitle, toDoTime, toDoMemo;
 
     String getId, getDate, getTime;
+    static String[] week_name = {"日", "月", "火", "水", "木", "金", "土"};
 
     private DBAdapter dbAdapter; // DBAdapter
     private List<Map<String,Object>> list = new ArrayList<>();
@@ -67,11 +69,18 @@ public class ToDoList extends Fragment implements View.OnClickListener {
         String[] columns = {DBAdapter.COL_TITLE, DBAdapter.COL_DEADLINE}; // DBのカラム：ToDo名
         Cursor c = dbAdapter.getDB(columns);
 
+        int listYear, listMonth, listDay, listWeek;
+        Calendar calendar = Calendar.getInstance();
+
         if (c.moveToFirst()) {
             do {
+                listYear  = Integer.parseInt(c.getString(1).substring(0,4));
+                listMonth = Integer.parseInt(c.getString(1).substring(4,6));
+                listDay   = Integer.parseInt(c.getString(1).substring(6,8));
+                calendar.set(listYear, listMonth-1, listDay);
                 Map<String,Object> map = new HashMap<>();
                 map.put("title", c.getString(0));
-                map.put("date", c.getString(1).substring(4,6) + "月" + c.getString(1).substring(6,8) +"日");
+                map.put("date", listMonth + "月" + listDay + "日(" + week_name[calendar.get(Calendar.DAY_OF_WEEK)-1] + ")");
                 map.put("time", c.getString(1).substring(8,10) + ":" + c.getString(1).substring(10,12));
                 list.add(map);
             } while (c.moveToNext());
@@ -106,6 +115,7 @@ public class ToDoList extends Fragment implements View.OnClickListener {
         switch (v.getId()) {
             case R.id.finBtn:
             case R.id.delBtn:
+                dbAdapter = new DBAdapter(getActivity());
                 dbAdapter.openDB();
                 dbAdapter.selectDelete(String.valueOf(getId));
                 dbAdapter.closeDB();

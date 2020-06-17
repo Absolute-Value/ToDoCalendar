@@ -8,9 +8,9 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentPagerAdapter;
 
-import com.example.x3033076.finalextodocalendar.Calendar;
+import com.example.x3033076.finalextodocalendar.CalendarFragment;
 import com.example.x3033076.finalextodocalendar.R;
-import com.example.x3033076.finalextodocalendar.ToDoList;
+import com.example.x3033076.finalextodocalendar.ToDoListFragment;
 
 /**
  * A [FragmentPagerAdapter] that returns a fragment corresponding to
@@ -35,10 +35,10 @@ public class SectionsPagerAdapter extends FragmentPagerAdapter {
         Fragment fragment = null;
         switch (position) {
             case 0:
-                fragment = new Calendar();
+                fragment = new CalendarFragment();
                 break;
             case 1:
-                fragment = new ToDoList();
+                fragment = new ToDoListFragment();
                 break;
         }
         return fragment;

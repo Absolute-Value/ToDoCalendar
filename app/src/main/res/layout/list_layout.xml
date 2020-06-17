@@ -9,8 +9,9 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="10月11日(木)"
-        android:textSize="15dp"
-        android:background="@color/colorGray" />
+        android:textSize="14dp"
+        android:textColor="@color/colorWhite"
+        android:background="@color/colorYellow" />
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -18,13 +19,28 @@
         android:orientation="horizontal"
         android:background="@color/colorWhite">
 
-        <TextView
-            android:id="@+id/listTitleTV"
+        <LinearLayout
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="プログラミング実践"
-            android:textSize="30dp"/>
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/listHeadTV"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="プログラミング実践"
+                android:textSize="15dp"/>
+
+            <TextView
+                android:id="@+id/listTitleTV"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="プログラム提出"
+                android:textColor="@color/colorBlack"
+                android:textSize="25dp"/>
+
+        </LinearLayout>
 
         <TextView
             android:id="@+id/listTimeTV"

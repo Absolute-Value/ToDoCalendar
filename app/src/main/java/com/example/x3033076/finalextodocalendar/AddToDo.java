@@ -17,9 +17,9 @@ import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.FragmentActivity;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 public class AddToDo extends FragmentActivity implements View.OnClickListener, DatePickerDialog.OnDateSetListener, TimePickerDialog.OnTimeSetListener {
@@ -78,11 +78,18 @@ public class AddToDo extends FragmentActivity implements View.OnClickListener, D
                     String[] columns = {DBAdapter.COL_TITLE, DBAdapter.COL_DEADLINE}; // DBのカラム：ToDo名
                     Cursor c = dbAdapter.getDB(columns);
 
+                    int listYear, listMonth, listDay, listWeek;
+                    Calendar calendar = Calendar.getInstance();
+
                     if (c.moveToFirst()) {
                         do {
+                            listYear  = Integer.parseInt(c.getString(1).substring(0,4));
+                            listMonth = Integer.parseInt(c.getString(1).substring(4,6));
+                            listDay   = Integer.parseInt(c.getString(1).substring(6,8));
+                            calendar.set(listYear, listMonth-1, listDay);
                             Map<String,Object> map = new HashMap<>();
                             map.put("title", c.getString(0));
-                            map.put("date", c.getString(1).substring(4,6) + "月" + c.getString(1).substring(6,8) +"日("+")");
+                            map.put("date", listMonth + "月" + listDay + "日(" +  ToDoListFragment.week_name[calendar.get(Calendar.DAY_OF_WEEK)-1] + ")");
                             map.put("time", c.getString(1).substring(8,10) + ":" + c.getString(1).substring(10,12));
                             list.add(map);
                         } while (c.moveToNext());
@@ -92,7 +99,7 @@ public class AddToDo extends FragmentActivity implements View.OnClickListener, D
 
                     SimpleAdapter adapter = new SimpleAdapter(this,
                             list,R.layout.list_layout,new String[] {"title", "date", "time"},new int[] {R.id.listTitleTV, R.id.listDateTV, R.id.listTimeTV});
-                    ToDoList.listV.setAdapter(adapter); //ListViewにアダプターをセット(=表示)
+                    ToDoListFragment.listV.setAdapter(adapter); //ListViewにアダプターをセット(=表示)
 
                     finish(); // このアクティビティを終了させる
                 }
