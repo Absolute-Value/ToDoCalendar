@@ -22,10 +22,9 @@ public class ToDoList extends Fragment implements View.OnClickListener {
 
     static ListView list;
     Button finishButton, editButton, deleteButton;
-    TextView toDoTitle, toDoDeadline, toDoMemo;
+    TextView toDoDate, toDoTitle, toDoTime, toDoMemo;
 
-    String getTitle = "";
-    String getId;
+    String getId, getDate, getTime;
 
     private DBAdapter dbAdapter;                // DBAdapter
     private ArrayAdapter<String> adapter;       // ArrayAdapter
@@ -41,8 +40,9 @@ public class ToDoList extends Fragment implements View.OnClickListener {
         tdRootView = inflater.inflate(R.layout.todo_list_layout, container, false);
 
         list = (ListView) tdRootView.findViewById(R.id.toDoLV);
+        toDoDate = (TextView) tdRootView.findViewById(R.id.dateTV);
         toDoTitle = (TextView) tdRootView.findViewById(R.id.titleTV);
-        toDoDeadline = (TextView) tdRootView.findViewById(R.id.deadLineTV);
+        toDoTime = (TextView) tdRootView.findViewById(R.id.timeTV);
         toDoMemo = (TextView) tdRootView.findViewById(R.id.memoTV);
         finishButton = (Button) tdRootView.findViewById(R.id.finBtn);
         editButton = (Button) tdRootView.findViewById(R.id.editBtn);
@@ -93,7 +93,9 @@ public class ToDoList extends Fragment implements View.OnClickListener {
             Cursor c = dbAdapter.getDB(columns);
             c.move(position+1);
             getId = c.getString(0);
-            init(c.getString(1),c.getString(2),c.getString(3),true);
+            getDate = c.getString(2).substring(0,4) + "年" + c.getString(2).substring(4,6) + "月" + c.getString(2).substring(6,8) +"日";
+            getTime = c.getString(2).substring(8,10) + ":" + c.getString(2).substring(10,12);
+            init(getDate, c.getString(1), getTime, c.getString(3),true);
             c.close();
             dbAdapter.closeDB();
         }
@@ -107,7 +109,7 @@ public class ToDoList extends Fragment implements View.OnClickListener {
                 dbAdapter.openDB();
                 dbAdapter.selectDelete(String.valueOf(getId));
                 dbAdapter.closeDB();
-                init("","","",false);
+                init("", "", "", "", false);
                 listUpdate();
                 break;
             case R.id.editBtn:
@@ -115,9 +117,10 @@ public class ToDoList extends Fragment implements View.OnClickListener {
         }
     }
 
-    void init(String titleText, String deadlineText, String memoText, boolean bool) {
+    void init(String dateText, String  titleText, String timeText, String memoText, boolean bool) {
+        toDoDate.setText(dateText);
         toDoTitle.setText(titleText);
-        toDoDeadline.setText(deadlineText);
+        toDoTime.setText(timeText);
         toDoMemo.setText(memoText);
         finishButton.setEnabled(bool);
         editButton.setEnabled(bool);

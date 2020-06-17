@@ -18,7 +18,10 @@
                 android:id="@+id/prevBtn"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/prev_month"/>
+                android:text="@string/prev_month"
+                android:textColor="@color/colorWhite"
+                android:textSize="20dp"
+                android:background="@color/colorRed"/>
 
             <TextView
                 android:id="@+id/monthTV"
@@ -34,7 +37,10 @@
                 android:id="@+id/nextBtn"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/next_month"/>
+                android:text="@string/next_month"
+                android:textColor="@color/colorWhite"
+                android:textSize="20dp"
+                android:background="@color/colorRed"/>
 
         </LinearLayout>
 

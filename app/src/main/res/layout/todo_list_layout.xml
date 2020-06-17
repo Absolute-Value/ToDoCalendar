@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:background="@color/colorYellow">
@@ -16,37 +17,6 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal">
-
-        <Button
-            android:id="@+id/finBtn"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="@string/finish"
-            android:enabled="false"/>
-
-        <Button
-            android:id="@+id/editBtn"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="@string/edit"
-            android:enabled="false"/>
-
-        <Button
-            android:id="@+id/delBtn"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="@string/delete"
-            android:enabled="false"/>
-
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
         android:orientation="vertical">
@@ -54,53 +24,75 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal">
+            android:orientation="horizontal"
+            android:layout_marginVertical="5dp"
+            android:layout_marginHorizontal="5dp">
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/todo_title"
-                android:textSize="20dp"/>
-
-            <TextView
-                android:id="@+id/titleTV"
+            <Button
+                android:id="@+id/finBtn"
                 android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:layout_marginHorizontal="5dp"
-                android:textSize="20dp"
-                android:background="@color/colorWhite"/>
-
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="5dp"
-            android:orientation="horizontal">
-
-            <TextView
-                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/deadline"
-                android:textSize="20dp"/>
-
-            <TextView
-                android:id="@+id/deadLineTV"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
                 android:layout_weight="1"
-                android:layout_marginHorizontal="5dp"
-                android:textSize="20dp"
-                android:background="@color/colorWhite"/>
+                android:layout_marginRight="5dp"
+                android:text="@string/finish"
+                android:textColor="@color/colorBlack"
+                android:background="@color/colorWhite"
+                android:enabled="false"/>
+
+            <Button
+                android:id="@+id/editBtn"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:layout_marginRight="5dp"
+                android:text="@string/edit"
+                android:textColor="@color/colorBlack"
+                android:background="@color/colorWhite"
+                android:enabled="false"/>
+
+            <Button
+                android:id="@+id/delBtn"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="@string/delete"
+                android:textColor="@color/colorRed"
+                android:background="@color/colorWhite"
+                android:enabled="false"/>
 
         </LinearLayout>
 
         <TextView
+            android:id="@+id/dateTV"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/memo"
-            android:textSize="20dp"/>
+            android:layout_marginHorizontal="5dp"
+            android:textSize="17dp"
+            android:background="@color/colorGray"/>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginHorizontal="5dp"
+            android:background="@color/colorWhite">
+
+            <TextView
+                android:id="@+id/titleTV"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:textSize="35dp"/>
+
+            <TextView
+                android:id="@+id/timeTV"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_marginHorizontal="5dp"
+                android:gravity="center"
+                android:textSize="17dp"/>
+
+        </LinearLayout>
 
         <TextView
             android:id="@+id/memoTV"

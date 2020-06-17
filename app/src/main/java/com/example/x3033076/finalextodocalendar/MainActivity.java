@@ -13,8 +13,6 @@ import android.view.View;
 
 import com.example.x3033076.finalextodocalendar.ui.main.SectionsPagerAdapter;
 
-import java.util.Date;
-
 public class MainActivity extends AppCompatActivity {
 
     @Override
