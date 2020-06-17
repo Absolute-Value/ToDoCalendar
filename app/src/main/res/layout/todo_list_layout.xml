@@ -24,21 +24,24 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="@string/finish"/>
+            android:text="@string/finish"
+            android:enabled="false"/>
 
         <Button
             android:id="@+id/editBtn"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="@string/edit"/>
+            android:text="@string/edit"
+            android:enabled="false"/>
 
         <Button
             android:id="@+id/delBtn"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="@string/delete"/>
+            android:text="@string/delete"
+            android:enabled="false"/>
 
     </LinearLayout>
 

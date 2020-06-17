@@ -65,6 +65,10 @@ public class ToDoList extends Fragment implements View.OnClickListener {
         public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
             getTitle = (String) adapterView.getItemAtPosition(position);
             toDoTitle.setText(getTitle);
+
+            finishButton.setEnabled(true);
+            editButton.setEnabled(true);
+            deleteButton.setEnabled(true);
         }
     }
 
