@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="horizontal">
+
+    <Button
+        android:id="@+id/setRedBtn"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:layout_marginRight="3dp"
+        android:background="@color/colorRed"/>
+
+    <Button
+        android:id="@+id/setYellowBtn"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:layout_marginRight="3dp"
+        android:background="@color/colorYellow"/>
+
+    <Button
+        android:id="@+id/setLightGreenBtn"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:layout_marginRight="3dp"
+        android:background="@color/colorLightGreen"/>
+
+    <Button
+        android:id="@+id/setGreenBtn"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:layout_marginRight="3dp"
+        android:background="@color/colorGreen"/>
+
+    <Button
+        android:id="@+id/setLightBlueBtn"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:layout_marginRight="3dp"
+        android:background="@color/colorLightBlue"/>
+
+    <Button
+        android:id="@+id/setBlueBtn"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:layout_marginRight="3dp"
+        android:background="@color/colorBlue"/>
+
+</LinearLayout>

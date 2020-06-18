@@ -20,6 +20,14 @@
         android:orientation="horizontal"
         android:background="@color/colorWhite">
 
+        <View
+            android:id="@+id/listColorTV"
+            android:layout_width="8dp"
+            android:layout_height="match_parent"
+            android:layout_marginHorizontal="5dp"
+            android:layout_marginVertical="5dp"
+            android:background="@color/colorLightBlue"/>
+
         <LinearLayout
             android:layout_width="0dp"
             android:layout_height="wrap_content"

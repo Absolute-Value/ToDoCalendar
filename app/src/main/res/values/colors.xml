@@ -4,7 +4,10 @@
     <color name="colorPrimaryDark">#055</color>
     <color name="colorAccent">#FE0</color>
     <color name="colorRed">#F00</color>
+    <color name="colorGreen">#080</color>
     <color name="colorBlue">#00F</color>
+    <color name="colorLightGreen">#0F0</color>
+    <color name="colorLightBlue">#0CD</color>
     <color name="colorYellow">#FB5</color>
     <color name="colorWhite">#FFF</color>
     <color name="colorBlack">#000</color>

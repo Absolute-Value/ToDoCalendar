@@ -1,130 +1,135 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent"
-    android:layout_height="match_parent">
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical">
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:background="@color/colorRed">
 
-        <LinearLayout
-            android:layout_width="match_parent"
+        <Button
+            android:id="@+id/calPrevBtn"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:background="@color/colorRed">
-
-            <Button
-                android:id="@+id/prevBtn"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/prev_month"
-                android:textColor="@color/colorWhite"
-                android:textSize="30dp"
-                android:background="@color/colorRed"/>
-
-            <TextView
-                android:id="@+id/monthTV"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:text="2020年11月"
-                android:textColor="@color/colorWhite"
-                android:textSize="30dp"
-                android:gravity="center"/>
-
-            <Button
-                android:id="@+id/nextBtn"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/next_month"
-                android:textColor="@color/colorWhite"
-                android:textSize="30dp"
-                android:background="@color/colorRed"/>
-
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
-
-            <TextView
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:layout_marginHorizontal="1dp"
-                android:text="@string/sunday"
-                android:textColor="@color/colorRed"
-                android:background="@color/colorWhite"
-                android:gravity="center"/>
-
-            <TextView
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:layout_marginRight="1dp"
-                android:text="@string/monday"
-                android:background="@color/colorWhite"
-                android:gravity="center"/>
-
-            <TextView
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:layout_marginRight="1dp"
-                android:text="@string/tuesday"
-                android:background="@color/colorWhite"
-                android:gravity="center"/>
-
-            <TextView
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:layout_marginRight="1dp"
-                android:text="@string/wednesday"
-                android:background="@color/colorWhite"
-                android:gravity="center"/>
-
-            <TextView
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:layout_marginRight="1dp"
-                android:text="@string/thursday"
-                android:background="@color/colorWhite"
-                android:gravity="center"/>
-
-            <TextView
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:layout_marginRight="1dp"
-                android:text="@string/friday"
-                android:background="@color/colorWhite"
-                android:gravity="center"/>
-
-            <TextView
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:layout_marginRight="1dp"
-                android:text="@string/saturday"
-                android:textColor="@color/colorBlue"
-                android:background="@color/colorWhite"
-                android:gravity="center"/>
-
-        </LinearLayout>
-
-        <GridView
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="3"/>
+            android:text="@string/prev_month"
+            android:textColor="@color/colorWhite"
+            android:textSize="30dp"
+            android:background="@color/colorRed"/>
 
         <TextView
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="1"/>
+            android:id="@+id/calMonthTV"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:text="2020年11月"
+            android:textColor="@color/colorWhite"
+            android:textSize="30dp"
+            android:gravity="center"/>
+
+        <Button
+            android:id="@+id/calNextBtn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/next_month"
+            android:textColor="@color/colorWhite"
+            android:textSize="30dp"
+            android:background="@color/colorRed"/>
 
     </LinearLayout>
-</androidx.constraintlayout.widget.ConstraintLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:layout_marginHorizontal="1dp"
+            android:text="@string/sunday"
+            android:textColor="@color/colorRed"
+            android:background="@color/colorWhite"
+            android:gravity="center"/>
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:layout_marginRight="1dp"
+            android:text="@string/monday"
+            android:background="@color/colorWhite"
+            android:gravity="center"/>
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:layout_marginRight="1dp"
+            android:text="@string/tuesday"
+            android:background="@color/colorWhite"
+            android:gravity="center"/>
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:layout_marginRight="1dp"
+            android:text="@string/wednesday"
+            android:background="@color/colorWhite"
+            android:gravity="center"/>
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:layout_marginRight="1dp"
+            android:text="@string/thursday"
+            android:background="@color/colorWhite"
+            android:gravity="center"/>
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:layout_marginRight="1dp"
+            android:text="@string/friday"
+            android:background="@color/colorWhite"
+            android:gravity="center"/>
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:layout_marginRight="1dp"
+            android:text="@string/saturday"
+            android:textColor="@color/colorBlue"
+            android:background="@color/colorWhite"
+            android:gravity="center"/>
+
+    </LinearLayout>
+
+    <GridView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="3"
+        android:layout_marginLeft="1dp"/>
+
+    <TextView
+        android:id="@+id/calDateTV"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="5dp"
+        android:layout_marginVertical="5dp"
+        android:text="11月1日(月)"/>
+
+    <ListView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="2"
+        android:background="@color/colorWhite"/>
+
+</LinearLayout>
