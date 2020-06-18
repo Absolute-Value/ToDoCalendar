@@ -24,7 +24,7 @@ import java.util.Map;
 
 public class AddToDo extends FragmentActivity implements View.OnClickListener, DatePickerDialog.OnDateSetListener, TimePickerDialog.OnTimeSetListener {
 
-    TextView toDoTitleTextView, memoTextView;
+    TextView toDoTitleTextView, toDoHeaderTextView, memoTextView;
     Button dateButton, timeButton, cancelButton, addButton;
     Date now;
     int year, month, day, hour, minute;
@@ -37,6 +37,7 @@ public class AddToDo extends FragmentActivity implements View.OnClickListener, D
         setContentView(R.layout.todo_add_layout);
 
         toDoTitleTextView = findViewById(R.id.toDoTitleTV);
+        toDoHeaderTextView = findViewById(R.id.toDoHeaderTV);
         dateButton = findViewById(R.id.dateBtn);
         timeButton = findViewById(R.id.timeBtn);
         memoTextView = findViewById(R.id.toDoMemoTV);
@@ -64,6 +65,7 @@ public class AddToDo extends FragmentActivity implements View.OnClickListener, D
         switch (v.getId()) {
             case R.id.addBtn:
                 String title = toDoTitleTextView.getText().toString();
+                String header = toDoHeaderTextView.getText().toString();
                 String deadline = String.format("%04d",year) + String.format("%02d",month) + String.format("%02d",day)
                         + String.format("%02d",hour) + String.format("%02d",minute);
                 String memo = memoTextView.getText().toString();
@@ -72,25 +74,26 @@ public class AddToDo extends FragmentActivity implements View.OnClickListener, D
                 } else {
                     DBAdapter dbAdapter = new DBAdapter(this);
                     dbAdapter.openDB();
-                    dbAdapter.saveDB(title, deadline, memo);
+                    dbAdapter.saveDB(title, header, deadline, memo);
 
                     // DBのデータを取得
-                    String[] columns = {DBAdapter.COL_TITLE, DBAdapter.COL_DEADLINE}; // DBのカラム：ToDo名
+                    String[] columns = {DBAdapter.COL_TITLE, DBAdapter.COL_HEADER, DBAdapter.COL_DEADLINE}; // DBのカラム：ToDo名
                     Cursor c = dbAdapter.getDB(columns);
 
-                    int listYear, listMonth, listDay, listWeek;
+                    int listYear, listMonth, listDay;
                     Calendar calendar = Calendar.getInstance();
 
                     if (c.moveToFirst()) {
                         do {
-                            listYear  = Integer.parseInt(c.getString(1).substring(0,4));
-                            listMonth = Integer.parseInt(c.getString(1).substring(4,6));
-                            listDay   = Integer.parseInt(c.getString(1).substring(6,8));
+                            listYear  = Integer.parseInt(c.getString(2).substring(0,4));
+                            listMonth = Integer.parseInt(c.getString(2).substring(4,6));
+                            listDay   = Integer.parseInt(c.getString(2).substring(6,8));
                             calendar.set(listYear, listMonth-1, listDay);
                             Map<String,Object> map = new HashMap<>();
                             map.put("title", c.getString(0));
+                            map.put("header", c.getString(1));
                             map.put("date", listMonth + "月" + listDay + "日(" +  ToDoListFragment.week_name[calendar.get(Calendar.DAY_OF_WEEK)-1] + ")");
-                            map.put("time", c.getString(1).substring(8,10) + ":" + c.getString(1).substring(10,12));
+                            map.put("time", c.getString(2).substring(8,10) + ":" + c.getString(2).substring(10,12));
                             list.add(map);
                         } while (c.moveToNext());
                     }
@@ -98,7 +101,7 @@ public class AddToDo extends FragmentActivity implements View.OnClickListener, D
                     dbAdapter.closeDB(); // DBを閉じる
 
                     SimpleAdapter adapter = new SimpleAdapter(this,
-                            list,R.layout.list_layout,new String[] {"title", "date", "time"},new int[] {R.id.listTitleTV, R.id.listDateTV, R.id.listTimeTV});
+                            list,R.layout.list_layout,new String[] {"title", "header", "date", "time"},new int[] {R.id.listTitleTV, R.id.listHeaderTV, R.id.listDateTV, R.id.listTimeTV});
                     ToDoListFragment.listV.setAdapter(adapter); //ListViewにアダプターをセット(=表示)
 
                     finish(); // このアクティビティを終了させる

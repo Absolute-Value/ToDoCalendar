@@ -25,7 +25,7 @@ public class ToDoListFragment extends Fragment implements View.OnClickListener {
 
     static ListView listV;
     Button finishButton, editButton, deleteButton;
-    TextView toDoDate, toDoTitle, toDoTime, toDoMemo;
+    TextView toDoDate, toDoHeader, toDoTitle, toDoTime, toDoMemo;
 
     String getId, getDate, getTime;
     static String[] week_name = {"日", "月", "火", "水", "木", "金", "土"};
@@ -44,6 +44,7 @@ public class ToDoListFragment extends Fragment implements View.OnClickListener {
 
         listV = (ListView) tdRootView.findViewById(R.id.toDoLV);
         toDoDate = (TextView) tdRootView.findViewById(R.id.dateTV);
+        toDoHeader = (TextView) tdRootView.findViewById(R.id.headerTV);
         toDoTitle = (TextView) tdRootView.findViewById(R.id.titleTV);
         toDoTime = (TextView) tdRootView.findViewById(R.id.timeTV);
         toDoMemo = (TextView) tdRootView.findViewById(R.id.memoTV);
@@ -66,22 +67,25 @@ public class ToDoListFragment extends Fragment implements View.OnClickListener {
         dbAdapter.openDB(); // DBの読み込み(読み書きの方)
 
         // DBのデータを取得
-        String[] columns = {DBAdapter.COL_TITLE, DBAdapter.COL_DEADLINE}; // DBのカラム：ToDo名
+        String[] columns = {DBAdapter.COL_TITLE, DBAdapter.COL_HEADER, DBAdapter.COL_DEADLINE}; // DBのカラム：ToDo名
         Cursor c = dbAdapter.getDB(columns);
 
-        int listYear, listMonth, listDay, listWeek;
+        int listYear, listMonth, listDay;
         Calendar calendar = Calendar.getInstance();
+
+        list.clear(); // これがないとリスト増殖バグ発生
 
         if (c.moveToFirst()) {
             do {
-                listYear  = Integer.parseInt(c.getString(1).substring(0,4));
-                listMonth = Integer.parseInt(c.getString(1).substring(4,6));
-                listDay   = Integer.parseInt(c.getString(1).substring(6,8));
+                listYear  = Integer.parseInt(c.getString(2).substring(0,4));
+                listMonth = Integer.parseInt(c.getString(2).substring(4,6));
+                listDay   = Integer.parseInt(c.getString(2).substring(6,8));
                 calendar.set(listYear, listMonth-1, listDay);
                 Map<String,Object> map = new HashMap<>();
                 map.put("title", c.getString(0));
+                map.put("header", c.getString(1));
                 map.put("date", listMonth + "月" + listDay + "日(" + week_name[calendar.get(Calendar.DAY_OF_WEEK)-1] + ")");
-                map.put("time", c.getString(1).substring(8,10) + ":" + c.getString(1).substring(10,12));
+                map.put("time", c.getString(2).substring(8,10) + ":" + c.getString(2).substring(10,12));
                 list.add(map);
             } while (c.moveToNext());
         }
@@ -89,7 +93,7 @@ public class ToDoListFragment extends Fragment implements View.OnClickListener {
         dbAdapter.closeDB(); // DBを閉じる
 
         SimpleAdapter adapter = new SimpleAdapter(getActivity(),
-                list,R.layout.list_layout,new String[] {"title", "date", "time"},new int[] {R.id.listTitleTV, R.id.listDateTV, R.id.listTimeTV});
+                list,R.layout.list_layout,new String[] {"title", "header", "date", "time"},new int[] {R.id.listTitleTV, R.id.listHeaderTV, R.id.listDateTV, R.id.listTimeTV});
         listV.setAdapter(adapter); //ListViewにアダプターをセット(=表示)
     }
 
@@ -98,13 +102,13 @@ public class ToDoListFragment extends Fragment implements View.OnClickListener {
         @Override
         public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
             dbAdapter.openDB();
-            String[] columns = {DBAdapter.COL_ID, DBAdapter.COL_TITLE, DBAdapter.COL_DEADLINE, DBAdapter.COL_MEMO}; // DBのカラム：ID, ToDo名, 期限, メモ
+            String[] columns = {DBAdapter.COL_ID, DBAdapter.COL_TITLE, DBAdapter.COL_HEADER, DBAdapter.COL_DEADLINE, DBAdapter.COL_MEMO}; // DBのカラム：ID, ToDo名, 期限, メモ
             Cursor c = dbAdapter.getDB(columns);
             c.move(position+1);
             getId = c.getString(0);
-            getDate = c.getString(2).substring(0,4) + "年" + c.getString(2).substring(4,6) + "月" + c.getString(2).substring(6,8) +"日";
-            getTime = c.getString(2).substring(8,10) + ":" + c.getString(2).substring(10,12);
-            init(getDate, c.getString(1), getTime, c.getString(3),true);
+            getDate = c.getString(3).substring(0,4) + "年" + c.getString(3).substring(4,6) + "月" + c.getString(3).substring(6,8) +"日";
+            getTime = c.getString(3).substring(8,10) + ":" + c.getString(3).substring(10,12);
+            init(getDate, c.getString(2), c.getString(1), getTime, c.getString(4),true);
             c.close();
             dbAdapter.closeDB();
         }
@@ -115,11 +119,11 @@ public class ToDoListFragment extends Fragment implements View.OnClickListener {
         switch (v.getId()) {
             case R.id.finBtn:
             case R.id.delBtn:
-                dbAdapter = new DBAdapter(getActivity());
+                // dbAdapter = new DBAdapter(getActivity());
                 dbAdapter.openDB();
                 dbAdapter.selectDelete(String.valueOf(getId));
                 dbAdapter.closeDB();
-                init("", "", "", "", false);
+                init("", "", "", "", "", false);
                 listUpdate();
                 break;
             case R.id.editBtn:
@@ -127,8 +131,9 @@ public class ToDoListFragment extends Fragment implements View.OnClickListener {
         }
     }
 
-    void init(String dateText, String  titleText, String timeText, String memoText, boolean bool) {
+    void init(String dateText, String headerText, String titleText, String timeText, String memoText, boolean bool) {
         toDoDate.setText(dateText);
+        toDoHeader.setText(headerText);
         toDoTitle.setText(titleText);
         toDoTime.setText(timeText);
         toDoMemo.setText(memoText);

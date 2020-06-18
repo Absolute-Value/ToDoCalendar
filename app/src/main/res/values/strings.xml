@@ -15,6 +15,7 @@
     <string name="edit">編集</string>
     <string name="delete">削除</string>
     <string name="todo_title">ToDo名</string>
+    <string name="todo_header">項目名</string>
     <string name="deadline">締切日</string>
     <string name="memo">メモ</string>
     <string name="cancel">キャンセル</string>

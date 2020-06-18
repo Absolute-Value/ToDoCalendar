@@ -14,6 +14,7 @@ public class DBAdapter {
 
     public final static String COL_ID = "_id";            // id
     public final static String COL_TITLE = "title";       // タイトル
+    public final static String COL_HEADER = "header";     // 項目名
     public final static String COL_DEADLINE = "deadline"; // 期限
     public final static String COL_MEMO = "memo";         // メモ
 
@@ -31,23 +32,19 @@ public class DBAdapter {
         return this;
     }
 
-    public DBAdapter readDB() {
-        db = dbHelper.getReadableDatabase();        // DBの読み込み
-        return this;
-    }
-
     public void closeDB() {
         db.close();     // DBを閉じる
         db = null;
     }
 
-    public void saveDB(String title, String deadline, String memo) {
+    public void saveDB(String title, String header, String deadline, String memo) {
 
         db.beginTransaction(); // トランザクション開始
 
         try {
             ContentValues values = new ContentValues(); // ContentValuesでデータを設定していく
             values.put(COL_TITLE, title);
+            values.put(COL_HEADER, header);
             values.put(COL_DEADLINE, deadline);
             values.put(COL_MEMO, memo);
 
@@ -89,6 +86,7 @@ public class DBAdapter {
             String createTbl = "CREATE TABLE " + DB_TABLE + " ("
                     + COL_ID + " INTEGER PRIMARY KEY,"
                     + COL_TITLE + " TEXT NOT NULL,"
+                    + COL_HEADER + " TEXT NOT NULL,"
                     + COL_DEADLINE + " TEXT NOT NULL,"
                     + COL_MEMO + " TEXT NOT NULL"
                     + ");";
