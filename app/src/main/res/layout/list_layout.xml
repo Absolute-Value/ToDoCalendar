@@ -2,16 +2,17 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:background="@color/colorYellow">
 
     <TextView
         android:id="@+id/listDateTV"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginHorizontal="5dp"
         android:text="10月11日(木)"
         android:textSize="14dp"
-        android:textColor="@color/colorWhite"
-        android:background="@color/colorYellow" />
+        android:textColor="@color/colorWhite"/>
 
     <LinearLayout
         android:layout_width="match_parent"

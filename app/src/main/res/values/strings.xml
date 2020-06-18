@@ -2,8 +2,8 @@
     <string name="app_name">ToDoリスト付きカレンダー</string>
     <string name="tab_text_1">カレンダー</string>
     <string name="tab_text_2">ToDoリスト</string>
-    <string name="prev_month">先月</string>
-    <string name="next_month">来月</string>
+    <string name="prev_month">&lt;&lt;</string>
+    <string name="next_month">&gt;&gt;</string>
     <string name="sunday">日</string>
     <string name="monday">月</string>
     <string name="tuesday">火</string>

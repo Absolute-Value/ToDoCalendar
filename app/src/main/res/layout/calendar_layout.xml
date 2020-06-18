@@ -20,7 +20,7 @@
                 android:layout_height="wrap_content"
                 android:text="@string/prev_month"
                 android:textColor="@color/colorWhite"
-                android:textSize="20dp"
+                android:textSize="30dp"
                 android:background="@color/colorRed"/>
 
             <TextView
@@ -30,7 +30,7 @@
                 android:layout_weight="1"
                 android:text="2020年11月"
                 android:textColor="@color/colorWhite"
-                android:textSize="26dp"
+                android:textSize="30dp"
                 android:gravity="center"/>
 
             <Button
@@ -39,7 +39,7 @@
                 android:layout_height="wrap_content"
                 android:text="@string/next_month"
                 android:textColor="@color/colorWhite"
-                android:textSize="20dp"
+                android:textSize="30dp"
                 android:background="@color/colorRed"/>
 
         </LinearLayout>
