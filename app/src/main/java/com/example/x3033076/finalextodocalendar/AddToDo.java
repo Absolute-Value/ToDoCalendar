@@ -112,8 +112,8 @@ public class AddToDo extends FragmentActivity implements View.OnClickListener, D
                     c.close();
                     dbAdapter.closeDB(); // DBを閉じる
 
-                    SimpleAdapter adapter = new SimpleAdapter(this,
-                            list, R.layout.list_layout, new String[]{"title", "header", "date", "time"}, new int[]{R.id.listTitleTV, R.id.listHeaderTV, R.id.listDateTV, R.id.listTimeTV});
+                    SimpleAdapter adapter = new MyAdapter(this, list, R.layout.list_layout, new String[]{"title", "header", "date", "time", "color"},
+                            new int[]{R.id.listTitleTV, R.id.listHeaderTV, R.id.listDateTV, R.id.listTimeTV, R.id.listColorTV});
                     ToDoListFragment.listV.setAdapter(adapter); //ListViewにアダプターをセット(=表示)
 
                     finish(); // このアクティビティを終了させる
