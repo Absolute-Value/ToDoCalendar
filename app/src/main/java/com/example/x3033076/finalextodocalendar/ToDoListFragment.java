@@ -1,5 +1,6 @@
 package com.example.x3033076.finalextodocalendar;
 
+import android.content.res.Resources;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -29,11 +30,12 @@ public class ToDoListFragment extends Fragment implements View.OnClickListener {
 
     String getId, getDate, getTime;
     static String[] week_name = {"日", "月", "火", "水", "木", "金", "土"};
+    Resources toDoFresource;
 
     private DBAdapter dbAdapter; // DBAdapter
     private List<Map<String,Object>> list = new ArrayList<>();
 
-    private View tdRootView;
+    private View toDoColorView, tdRootView;
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater,
@@ -43,6 +45,7 @@ public class ToDoListFragment extends Fragment implements View.OnClickListener {
         tdRootView = inflater.inflate(R.layout.todo_list_layout, container, false);
 
         listV = (ListView) tdRootView.findViewById(R.id.toDoLV);
+        toDoColorView = (View) tdRootView.findViewById(R.id.toDoColorV);
         toDoDate = (TextView) tdRootView.findViewById(R.id.dateTV);
         toDoHeader = (TextView) tdRootView.findViewById(R.id.headerTV);
         toDoTitle = (TextView) tdRootView.findViewById(R.id.titleTV);
@@ -57,6 +60,7 @@ public class ToDoListFragment extends Fragment implements View.OnClickListener {
         editButton.setOnClickListener(this);
         deleteButton.setOnClickListener(this);
 
+        toDoFresource = tdRootView.getResources();
         listUpdate();
 
         return tdRootView;
@@ -102,13 +106,13 @@ public class ToDoListFragment extends Fragment implements View.OnClickListener {
         @Override
         public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
             dbAdapter.openDB();
-            String[] columns = {DBAdapter.COL_ID, DBAdapter.COL_TITLE, DBAdapter.COL_HEADER, DBAdapter.COL_DEADLINE, DBAdapter.COL_MEMO}; // DBのカラム：ID, ToDo名, 期限, メモ
+            String[] columns = {DBAdapter.COL_ID, DBAdapter.COL_TITLE, DBAdapter.COL_HEADER, DBAdapter.COL_DEADLINE, DBAdapter.COL_MEMO, DBAdapter.COL_COLOR}; // DBのカラム：ID, ToDo名, 期限, メモ
             Cursor c = dbAdapter.getDB(columns);
             c.move(position+1);
             getId = c.getString(0);
             getDate = c.getString(3).substring(0,4) + "年" + c.getString(3).substring(4,6) + "月" + c.getString(3).substring(6,8) +"日";
             getTime = c.getString(3).substring(8,10) + ":" + c.getString(3).substring(10,12);
-            init(getDate, c.getString(2), c.getString(1), getTime, c.getString(4),true);
+            init(getDate, c.getString(2), c.getString(1), getTime, c.getString(4), Integer.valueOf(c.getString(5)),true);
             c.close();
             dbAdapter.closeDB();
         }
@@ -123,7 +127,7 @@ public class ToDoListFragment extends Fragment implements View.OnClickListener {
                 dbAdapter.openDB();
                 dbAdapter.selectDelete(String.valueOf(getId));
                 dbAdapter.closeDB();
-                init("", "", "", "", "", false);
+                init("", "", "", "", "", toDoFresource.getColor(R.color.colorWhite),false);
                 listUpdate();
                 break;
             case R.id.editBtn:
@@ -131,12 +135,19 @@ public class ToDoListFragment extends Fragment implements View.OnClickListener {
         }
     }
 
-    void init(String dateText, String headerText, String titleText, String timeText, String memoText, boolean bool) {
+    @Override
+    public void onPause() {
+        super.onPause();
+        init("", "", "", "", "", toDoFresource.getColor(R.color.colorWhite), false);
+    }
+
+    void init(String dateText, String headerText, String titleText, String timeText, String memoText, int colorId, boolean bool) {
         toDoDate.setText(dateText);
         toDoHeader.setText(headerText);
         toDoTitle.setText(titleText);
         toDoTime.setText(timeText);
         toDoMemo.setText(memoText);
+        toDoColorView.setBackgroundColor(colorId);
         finishButton.setEnabled(bool);
         editButton.setEnabled(bool);
         deleteButton.setEnabled(bool);

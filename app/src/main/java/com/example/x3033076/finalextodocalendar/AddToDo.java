@@ -2,7 +2,9 @@ package com.example.x3033076.finalextodocalendar;
 
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
+import android.content.res.Resources;
 import android.database.Cursor;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -27,9 +29,10 @@ public class AddToDo extends FragmentActivity implements View.OnClickListener, D
     TextView toDoTitleTextView, toDoHeaderTextView, memoTextView;
     Button dateButton, timeButton, cancelButton, addButton;
     static Button setColorButton;
+    static int color;
+    Resources addResource;
     Date now;
     int year, month, day, hour, minute;
-    static int setToDoColor;
 
     private ArrayList<Map<String, Object>> list = new ArrayList<>();
 
@@ -53,6 +56,9 @@ public class AddToDo extends FragmentActivity implements View.OnClickListener, D
         cancelButton.setOnClickListener(this);
         addButton.setOnClickListener(this);
 
+        addResource = getResources();
+        color = addResource.getColor(R.color.colorLightBlue);
+
         now = new Date();
         year = now.getYear() + 1900;
         month = now.getMonth() + 1;
@@ -67,6 +73,8 @@ public class AddToDo extends FragmentActivity implements View.OnClickListener, D
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.addBtn:
+                ColorDrawable buttonColor = (ColorDrawable) setColorButton.getBackground();
+                // int colorId = buttonColor.getColor();
                 String title = toDoTitleTextView.getText().toString();
                 String header = toDoHeaderTextView.getText().toString();
                 String deadline = String.format("%04d", year) + String.format("%02d", month) + String.format("%02d", day)
@@ -77,10 +85,10 @@ public class AddToDo extends FragmentActivity implements View.OnClickListener, D
                 } else {
                     DBAdapter dbAdapter = new DBAdapter(this);
                     dbAdapter.openDB();
-                    dbAdapter.saveDB(title, header, deadline, memo);
+                    dbAdapter.saveDB(title, header, deadline, memo, color);
 
                     // DBのデータを取得
-                    String[] columns = {DBAdapter.COL_TITLE, DBAdapter.COL_HEADER, DBAdapter.COL_DEADLINE}; // DBのカラム：ToDo名
+                    String[] columns = {DBAdapter.COL_TITLE, DBAdapter.COL_HEADER, DBAdapter.COL_DEADLINE, DBAdapter.COL_COLOR}; // DBのカラム：ToDo名
                     Cursor c = dbAdapter.getDB(columns);
 
                     int listYear, listMonth, listDay;
@@ -97,6 +105,7 @@ public class AddToDo extends FragmentActivity implements View.OnClickListener, D
                             map.put("header", c.getString(1));
                             map.put("date", listMonth + "月" + listDay + "日(" + ToDoListFragment.week_name[calendar.get(Calendar.DAY_OF_WEEK) - 1] + ")");
                             map.put("time", c.getString(2).substring(8, 10) + ":" + c.getString(2).substring(10, 12));
+                            map.put("color", c.getString(3));
                             list.add(map);
                         } while (c.moveToNext());
                     }

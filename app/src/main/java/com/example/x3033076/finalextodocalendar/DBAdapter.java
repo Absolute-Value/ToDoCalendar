@@ -17,6 +17,7 @@ public class DBAdapter {
     public final static String COL_HEADER = "header";     // 項目名
     public final static String COL_DEADLINE = "deadline"; // 期限
     public final static String COL_MEMO = "memo";         // メモ
+    public final static String COL_COLOR = "color";       // カラー
 
     private SQLiteDatabase db = null;           // SQLiteDatabase
     private DBHelper dbHelper = null;           // DBHepler
@@ -37,7 +38,7 @@ public class DBAdapter {
         db = null;
     }
 
-    public void saveDB(String title, String header, String deadline, String memo) {
+    public void saveDB(String title, String header, String deadline, String memo, int color) {
 
         db.beginTransaction(); // トランザクション開始
 
@@ -47,6 +48,7 @@ public class DBAdapter {
             values.put(COL_HEADER, header);
             values.put(COL_DEADLINE, deadline);
             values.put(COL_MEMO, memo);
+            values.put(COL_COLOR, color);
 
             db.insert(DB_TABLE, null, values); // レコードへ登録
 
@@ -88,7 +90,8 @@ public class DBAdapter {
                     + COL_TITLE + " TEXT NOT NULL,"
                     + COL_HEADER + " TEXT NOT NULL,"
                     + COL_DEADLINE + " TEXT NOT NULL,"
-                    + COL_MEMO + " TEXT NOT NULL"
+                    + COL_MEMO + " TEXT NOT NULL,"
+                    + COL_COLOR + " INT NOT NULL"
                     + ");";
 
             db.execSQL(createTbl); //SQL文の実行

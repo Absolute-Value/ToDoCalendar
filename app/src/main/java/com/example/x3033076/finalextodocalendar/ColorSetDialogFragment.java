@@ -14,6 +14,7 @@ import androidx.fragment.app.DialogFragment;
 
 public class ColorSetDialogFragment extends DialogFragment implements View.OnClickListener {
     Button setRed, setYellow, setLightGreen, setGreen, setLightBlue, setBlue;
+    Resources resource;
 
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
@@ -36,6 +37,9 @@ public class ColorSetDialogFragment extends DialogFragment implements View.OnCli
         setLightBlue.setOnClickListener(this);
         setBlue.setOnClickListener(this);
 
+        resource = getResources();
+        AddToDo.color = resource.getColor(R.color.colorLightBlue);
+
         builder.setView(content);
 
         builder.setMessage("色を設定")
@@ -48,29 +52,28 @@ public class ColorSetDialogFragment extends DialogFragment implements View.OnCli
 
     @Override
     public void onClick(View view) {
-        Resources res = getResources();
         int setColor;
         switch (view.getId()) {
             case R.id.setRedBtn:
-                setColor = res.getColor(R.color.colorRed);
+                setColor = resource.getColor(R.color.colorRed);
                 break;
             case R.id.setYellowBtn:
-                setColor = res.getColor(R.color.colorYellow);
+                setColor = resource.getColor(R.color.colorYellow);
                 break;
             case R.id.setLightGreenBtn:
-                setColor = res.getColor(R.color.colorLightGreen);
+                setColor = resource.getColor(R.color.colorLightGreen);
                 break;
             case R.id.setGreenBtn:
-                setColor = res.getColor(R.color.colorGreen);
+                setColor = resource.getColor(R.color.colorGreen);
                 break;
             case R.id.setBlueBtn:
-                setColor = res.getColor(R.color.colorBlue);
+                setColor = resource.getColor(R.color.colorBlue);
                 break;
             default:
-                setColor = res.getColor(R.color.colorLightBlue);
+                setColor = resource.getColor(R.color.colorLightBlue);
                 break;
         }
-        AddToDo.setToDoColor = setColor;
         AddToDo.setColorButton.setBackgroundColor(setColor);
+        AddToDo.color = setColor;
     }
 }
