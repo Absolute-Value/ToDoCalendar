@@ -16,10 +16,13 @@ import java.util.List;
 import java.util.Locale;
 
 public class CalendarAdapter extends BaseAdapter {
+    static boolean doneCheck = false;
+
     private List<Date> dateArray = new ArrayList();
     private Context mContext;
     private DateManager mDateManager;
     private LayoutInflater mLayoutInflater;
+    static List<String> dayArray = new ArrayList();
 
     private static class ViewHolder { //カスタムセルを拡張したらここでWigetを定義
         public TextView dateText;
@@ -58,6 +61,7 @@ public class CalendarAdapter extends BaseAdapter {
         //日付のみ表示させる
         SimpleDateFormat dateFormat = new SimpleDateFormat("d", Locale.US);
         holder.dateText.setText(dateFormat.format(dateArray.get(position)));
+        dayArray.add(dateFormat.format(dateArray.get(position)));
 
         if (mDateManager.isCurrentMonth(dateArray.get(position))){ // 当月のセル
             convertView.setBackgroundColor(Color.WHITE);
@@ -97,13 +101,22 @@ public class CalendarAdapter extends BaseAdapter {
         return format.format(mDateManager.mCalendar.getTime());
     }
 
+    public String getMonth() {
+        SimpleDateFormat format = new SimpleDateFormat("MM", Locale.US);
+        return (format.format(mDateManager.mCalendar.getTime()));
+    }
+
     public void nextMonth(){ //翌月表示
+        dayArray.clear();
+        doneCheck=true;
         mDateManager.nextMonth();
         dateArray = mDateManager.getDays();
         this.notifyDataSetChanged();
     }
 
     public void prevMonth(){ //前月表示
+        dayArray.clear();
+        doneCheck=true;
         mDateManager.prevMonth();
         dateArray = mDateManager.getDays();
         this.notifyDataSetChanged();

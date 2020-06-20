@@ -133,6 +133,7 @@
         android:text="11月1日(月)"/>
 
     <ListView
+        android:id="@+id/calDateLV"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="2"
