@@ -1,6 +1,7 @@
 package com.example.x3033076.finalextodocalendar;
 
 import android.database.Cursor;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -8,6 +9,7 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.GridView;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
 import android.widget.TextView;
@@ -66,12 +68,11 @@ public class CalendarFragment extends Fragment {
 
         calendarGridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+            public void onItemClick(AdapterView<?> parent, View v, int position, long id) {
                 String nowYear = mCalendarAdapter.getTitle().substring(0,4);
                 int nowMonth = Integer.valueOf(mCalendarAdapter.getMonth());
-                String nowDay;
-                if(!mCalendarAdapter.doneCheck) nowDay = mCalendarAdapter.dayArray.get(position+4); // 起動時
-                else nowDay = mCalendarAdapter.dayArray.get(position+1); // 月変更した後
+                TextView cellDateText = v.findViewById(R.id.cellTV);
+                String nowDay = (String) cellDateText.getText();
                 if(Integer.valueOf(nowDay)-7>position) nowMonth--; // 先月末
                 if(position-7>Integer.valueOf(nowDay)) nowMonth++; // 来月頭
                 Calendar calendar = Calendar.getInstance();
@@ -104,7 +105,6 @@ public class CalendarFragment extends Fragment {
                 SimpleAdapter adapter = new MyAdapter(getActivity(), list, R.layout.calendar_list_layout, new String[]{"title", "header", "date", "time", "color"},
                         new int[]{R.id.calListTitleTV, R.id.calListHeaderTV, R.id.calListTimeTV, R.id.calListTimeTV, R.id.calListColorTV});
                 calList.setAdapter(adapter); //ListViewにアダプターをセット(=表示)
-
             }
         });
         return clRootView;

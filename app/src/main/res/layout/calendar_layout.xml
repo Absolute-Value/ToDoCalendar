@@ -117,20 +117,19 @@
         android:id="@+id/calendarGV"
         android:layout_width="match_parent"
         android:layout_height="0dp"
+        android:layout_marginLeft="1dp"
         android:layout_weight="4"
         android:horizontalSpacing="1dp"
-        android:layout_marginLeft="1dp"
         android:numColumns="7"
         android:stretchMode="columnWidth"
-        android:verticalSpacing="1dp"/>
+        android:verticalSpacing="1dp" />
 
     <TextView
         android:id="@+id/calDateTV"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="5dp"
-        android:layout_marginVertical="5dp"
-        android:text="11月1日(月)"/>
+        android:layout_marginVertical="5dp"/>
 
     <ListView
         android:id="@+id/calDateLV"

@@ -1,16 +1,19 @@
 package com.example.x3033076.finalextodocalendar;
 
 import android.content.Context;
+import android.database.Cursor;
 import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AbsListView;
 import android.widget.BaseAdapter;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
@@ -25,7 +28,11 @@ public class CalendarAdapter extends BaseAdapter {
     static List<String> dayArray = new ArrayList();
 
     private static class ViewHolder { //カスタムセルを拡張したらここでWigetを定義
+        public LinearLayout aroundLayout;
+        public LinearLayout insideLayout;
         public TextView dateText;
+        public TextView toDoShowText1;
+        public TextView toDoShowText2;
     }
 
     public CalendarAdapter(Context context){
@@ -46,7 +53,11 @@ public class CalendarAdapter extends BaseAdapter {
         if (convertView == null) {
             convertView = mLayoutInflater.inflate(R.layout.calendar_cell_layout, null);
             holder = new ViewHolder();
+            holder.aroundLayout = convertView.findViewById(R.id.around);
+            holder.insideLayout = convertView.findViewById(R.id.inside);
             holder.dateText = convertView.findViewById(R.id.cellTV);
+            holder.toDoShowText1 = convertView.findViewById(R.id.toDoShowTV1);
+            holder.toDoShowText2 = convertView.findViewById(R.id.toDoShowTV2);
             convertView.setTag(holder);
         } else {
             holder = (ViewHolder)convertView.getTag();
@@ -63,7 +74,41 @@ public class CalendarAdapter extends BaseAdapter {
         holder.dateText.setText(dateFormat.format(dateArray.get(position)));
         dayArray.add(dateFormat.format(dateArray.get(position)));
 
-        convertView.setBackgroundColor(Color.WHITE);
+        DBAdapter dbAdapter = new DBAdapter(convertView.getContext());
+        dbAdapter.openDB(); // DBの読み込み(読み書きの方)
+        String[] columns = {DBAdapter.COL_TITLE, DBAdapter.COL_DEADLINE, DBAdapter.COL_COLOR}; // DBのカラム：ToDo名
+        Cursor c = dbAdapter.getDB(columns);
+        SimpleDateFormat dFormat = new SimpleDateFormat("yyyyMMdd");
+        holder.toDoShowText1.setText("");
+        holder.toDoShowText1.setBackgroundColor(Color.WHITE);
+        holder.toDoShowText2.setText("");
+        holder.toDoShowText2.setBackgroundColor(Color.WHITE);
+        int count = 0;
+
+        if (c.moveToFirst()) {
+            do {
+                if(c.getString(1).substring(0,8).equals(dFormat.format(dateArray.get(position)))) {
+                    switch (count) {
+                        case 0:
+                            holder.toDoShowText1.setText(c.getString(0));
+                            holder.toDoShowText1.setBackgroundColor(Integer.valueOf(c.getString(2)));
+                            count++;
+                            break;
+                        case 1:
+                            holder.toDoShowText2.setText(c.getString(0));
+                            holder.toDoShowText2.setBackgroundColor(Integer.valueOf(c.getString(2)));
+                            count++;
+                            break;
+                        default:
+                            break;
+                    }
+                }
+            } while (c.moveToNext());
+        }
+        c.close();
+        dbAdapter.closeDB(); // DBを閉じる
+
+        // convertView.setBackgroundColor(Color.WHITE);
 
         int colorId;
         switch (mDateManager.getDayOfWeek(dateArray.get(position))){ //日曜日を赤、土曜日を青に
@@ -81,6 +126,14 @@ public class CalendarAdapter extends BaseAdapter {
                 break;
         }
         holder.dateText.setTextColor(colorId);
+        if (dFormat.format(Calendar.getInstance().getTime()).equals(dFormat.format(dateArray.get(position)))) {
+            holder.aroundLayout.setBackgroundColor(Color.rgb(255,187,85));
+            holder.dateText.setBackgroundColor(Color.rgb(255,187,85));
+            holder.dateText.setTextColor(Color.WHITE);
+        } else {
+            holder.aroundLayout.setBackgroundColor(Color.WHITE);
+            holder.dateText.setBackgroundColor(Color.WHITE);
+        }
 
         return convertView;
     }
