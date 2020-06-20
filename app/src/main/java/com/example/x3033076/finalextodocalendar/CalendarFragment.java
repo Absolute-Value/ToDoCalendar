@@ -101,8 +101,8 @@ public class CalendarFragment extends Fragment {
                 c.close();
                 dbAdapter.closeDB(); // DBを閉じる
 
-                SimpleAdapter adapter = new MyAdapter(getActivity(), list, R.layout.list_layout, new String[]{"title", "header", "date", "time", "color"},
-                        new int[]{R.id.listTitleTV, R.id.listHeaderTV, R.id.listDateTV, R.id.listTimeTV, R.id.listColorTV});
+                SimpleAdapter adapter = new MyAdapter(getActivity(), list, R.layout.calendar_list_layout, new String[]{"title", "header", "date", "time", "color"},
+                        new int[]{R.id.calListTitleTV, R.id.calListHeaderTV, R.id.calListTimeTV, R.id.calListTimeTV, R.id.calListColorTV});
                 calList.setAdapter(adapter); //ListViewにアダプターをセット(=表示)
 
             }

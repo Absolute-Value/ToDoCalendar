@@ -16,12 +16,14 @@ public class MyAdapter extends SimpleAdapter {
     LayoutInflater mLayoutInflater;
     String[] colm;
     int[] Rid;
+    int res;
     Context context;
 
     public MyAdapter(Context context, List<? extends Map<String, ?>> data, int resource, String[] from, int[] to) {
         super(context, data, resource, from, to);
         colm = from;
         Rid = to;
+        res = resource;
         this.context = context;
     }
 
@@ -29,7 +31,7 @@ public class MyAdapter extends SimpleAdapter {
     public View getView(int position, View convertView, ViewGroup parent) {
         mLayoutInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
-        convertView = mLayoutInflater.inflate(R.layout.list_layout, parent,false);
+        convertView = mLayoutInflater.inflate(res, parent,false);
         ListView listView = (ListView) parent;
 
         Map<String,Object> data = (Map<String,Object>)listView.getItemAtPosition(position);

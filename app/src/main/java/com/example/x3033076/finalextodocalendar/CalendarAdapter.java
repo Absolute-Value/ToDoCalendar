@@ -63,22 +63,21 @@ public class CalendarAdapter extends BaseAdapter {
         holder.dateText.setText(dateFormat.format(dateArray.get(position)));
         dayArray.add(dateFormat.format(dateArray.get(position)));
 
-        if (mDateManager.isCurrentMonth(dateArray.get(position))){ // 当月のセル
-            convertView.setBackgroundColor(Color.WHITE);
-        }else {
-            convertView.setBackgroundColor(Color.LTGRAY); // 当月以外のセル
-        }
+        convertView.setBackgroundColor(Color.WHITE);
 
         int colorId;
         switch (mDateManager.getDayOfWeek(dateArray.get(position))){ //日曜日を赤、土曜日を青に
             case 1:
-                colorId = Color.RED;
+                if (mDateManager.isCurrentMonth(dateArray.get(position))) colorId = Color.RED; // 当月のセル
+                else colorId = Color.argb(80, 255,0,0);               // 当月以外のセル
                 break;
             case 7:
-                colorId = Color.BLUE;
+                if (mDateManager.isCurrentMonth(dateArray.get(position))) colorId = Color.BLUE; // 当月のセル
+                else colorId = Color.argb(80, 0,0,255);               // 当月以外のセル
                 break;
             default:
-                colorId = Color.BLACK;
+                if (mDateManager.isCurrentMonth(dateArray.get(position))) colorId = Color.BLACK; // 当月のセル
+                else colorId = Color.argb(80, 0,0,0);                  // 当月以外のセル
                 break;
         }
         holder.dateText.setTextColor(colorId);
