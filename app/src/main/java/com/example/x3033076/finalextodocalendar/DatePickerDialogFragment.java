@@ -8,20 +8,18 @@ import android.widget.DatePicker;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.DialogFragment;
-import java.util.Date;
 
 public class DatePickerDialogFragment extends DialogFragment implements DatePickerDialog.OnDateSetListener {
 
     @NonNull
     @Override
     public Dialog onCreateDialog(@Nullable Bundle savedInstanceState) {
-        Date now = new Date();
-        int year = now.getYear()+1900;
-        int month = now.getMonth();
-        int day = now.getDate();
+        int year = getArguments().getInt("year");
+        int month = getArguments().getInt("month")-1;
+        int day = getArguments().getInt("day");
 
-        return new DatePickerDialog(getActivity(),
-                (AddToDo)getActivity(),  year, month, day);
+        if(ToDoListFragment.editMode) return new DatePickerDialog(getActivity(), (EditToDo)getActivity(),  year, month, day);
+        else return new DatePickerDialog(getActivity(), (AddToDo)getActivity(),  year, month, day);
     }
 
     @Override

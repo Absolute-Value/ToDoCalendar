@@ -4,7 +4,6 @@ import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
 import android.content.res.Resources;
 import android.database.Cursor;
-import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -70,7 +69,7 @@ public class AddToDo extends FragmentActivity implements View.OnClickListener, D
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
-            case R.id.addBtn:
+            case R.id.addBtn: // "追加" ボタンが押されたら
                 String title = toDoTitleTextView.getText().toString();
                 String header = toDoHeaderTextView.getText().toString();
                 String deadline = String.format("%04d", year) + String.format("%02d", month) + String.format("%02d", day)
@@ -115,7 +114,7 @@ public class AddToDo extends FragmentActivity implements View.OnClickListener, D
                     finish(); // このアクティビティを終了させる
                 }
                 break;
-            case R.id.cancelBtn:
+            case R.id.cancelBtn: // "キャンセル" ボタンが押されたら
                 finish(); // このアクティビティを終了させる
                 break;
         }
@@ -137,17 +136,26 @@ public class AddToDo extends FragmentActivity implements View.OnClickListener, D
     }
 
     public void showDatePickerDialog(View v) {
-        DialogFragment newFragment = new DatePickerDialogFragment();
-        newFragment.show(getSupportFragmentManager(), "datePicker");
+        DialogFragment newFragment = new DatePickerDialogFragment(); // フラグメントの作成
+        Bundle args = new Bundle();
+        args.putInt("year", year); // 引数 "年"
+        args.putInt("month", month); // 引数 "月"
+        args.putInt("day", day); // 引数 "日"
+        newFragment.setArguments(args);// 引数をフラグメントにセット
+        newFragment.show(getSupportFragmentManager(), "datePicker"); // フラグメント起動
     }
 
     public void showTimePickerDialog(View v) {
-        DialogFragment newFragment = new TimePickerDialogFragment();
-        newFragment.show(getSupportFragmentManager(), "TimePicker");
+        DialogFragment newFragment = new TimePickerDialogFragment(); // フラグメントの作成
+        Bundle args = new Bundle();
+        args.putInt("hour", hour); // 引数 "時"
+        args.putInt("minute", minute); // 引数 "分"
+        newFragment.setArguments(args); // 引数をフラグメントにセット
+        newFragment.show(getSupportFragmentManager(), "TimePicker"); // フラグメント起動
     }
 
     public void showColorSetDialog(View v) {
-        DialogFragment newFragment = new ColorSetDialogFragment();
-        newFragment.show(getSupportFragmentManager(), "ColorSet");
+        DialogFragment newFragment = new ColorSetDialogFragment(); // フラグメントの作成
+        newFragment.show(getSupportFragmentManager(), "ColorSet"); // フラグメント起動
     }
 }
