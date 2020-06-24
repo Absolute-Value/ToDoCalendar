@@ -109,4 +109,14 @@ public class CalendarFragment extends Fragment {
         });
         return clRootView;
     }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        calDate.setText("");
+        list.clear();
+        SimpleAdapter adapter = new MyAdapter(getActivity(), list, R.layout.calendar_list_layout, new String[]{"title", "header", "date", "time", "color"},
+                new int[]{R.id.calListTitleTV, R.id.calListHeaderTV, R.id.calListTimeTV, R.id.calListTimeTV, R.id.calListColorTV});
+        calList.setAdapter(adapter); //ListViewにアダプターをセット(=表示)
+    }
 }
