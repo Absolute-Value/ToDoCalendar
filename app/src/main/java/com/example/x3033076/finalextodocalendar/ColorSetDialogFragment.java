@@ -13,12 +13,11 @@ import android.widget.Button;
 import androidx.fragment.app.DialogFragment;
 
 public class ColorSetDialogFragment extends DialogFragment implements View.OnClickListener {
-    Button setRed, setYellow, setLightYellow, setLightGreen, setGreen, setSkyBlue, setLightBlue, setBlue, setDeepPurple, setPurple;
-    Resources resource;
+    Button setRed, setYellow, setLightYellow, setLightGreen, setGreen, setSkyBlue, setLightBlue, setBlue, setDeepPurple, setPurple; // 色を選択するボタン
+    Resources resource; // colors.xml を使えるようにする
 
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
-        // Use the Builder class for convenient dialog construction
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
 
         LayoutInflater inflater = (LayoutInflater) getActivity().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
@@ -34,6 +33,7 @@ public class ColorSetDialogFragment extends DialogFragment implements View.OnCli
         setDeepPurple = content.findViewById(R.id.setDeepPurpleBtn);
         setPurple = content.findViewById(R.id.setPurpleBtn);
 
+        // リスナ登録
         setRed.setOnClickListener(this);
         setYellow.setOnClickListener(this);
         setLightYellow.setOnClickListener(this);
@@ -46,15 +46,12 @@ public class ColorSetDialogFragment extends DialogFragment implements View.OnCli
         setPurple.setOnClickListener(this);
 
         resource = getResources();
-        AddToDo.color = resource.getColor(R.color.colorLightBlue);
 
         builder.setView(content);
 
-        builder.setMessage("色を設定")
-                .setNegativeButton("閉じる", new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int id) {}
-                });
-        // Create the AlertDialog object and return it
+        builder.setMessage("色を設定").setNegativeButton("閉じる", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int id) {}
+        });
         return builder.create();
     }
 
@@ -93,7 +90,11 @@ public class ColorSetDialogFragment extends DialogFragment implements View.OnCli
                 setColor = resource.getColor(R.color.colorPurple);
                 break;
         }
-        AddToDo.setColorButton.setBackgroundColor(setColor);
-        AddToDo.color = setColor;
+        if (ToDoListFragment.editMode) EditToDo.setColorButton.setBackgroundColor(setColor); // ToDoを編集中だったら
+        else AddToDo.setColorButton.setBackgroundColor(setColor);
+        if (ToDoListFragment.editMode) EditToDo.color = setColor; // ToDoを編集中だったら
+        else AddToDo.color = setColor;
+
+
     }
 }

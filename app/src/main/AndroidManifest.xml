@@ -21,6 +21,7 @@
         </activity>
 
         <activity android:name=".AddToDo"></activity>
+        <activity android:name=".EditToDo"></activity>
     </application>
 
 </manifest>

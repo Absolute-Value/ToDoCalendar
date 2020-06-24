@@ -1,5 +1,6 @@
 package com.example.x3033076.finalextodocalendar;
 
+import android.content.Intent;
 import android.content.res.Resources;
 import android.database.Cursor;
 import android.os.Bundle;
@@ -28,10 +29,12 @@ public class ToDoListFragment extends Fragment implements View.OnClickListener {
     Button finishButton, editButton, deleteButton;
     TextView toDoDate, toDoHeader, toDoTitle, toDoTime, toDoMemo;
 
+    int getPosition;
     String getId, getDate, getTime;
     static String[] week_name = {"日", "月", "火", "水", "木", "金", "土"};
-    Resources toDoFresource;
+    static Boolean editMode = false;
 
+    private Resources toDoFresource;
     private DBAdapter dbAdapter; // DBAdapter
     private List<Map<String,Object>> list = new ArrayList<>();
 
@@ -109,7 +112,8 @@ public class ToDoListFragment extends Fragment implements View.OnClickListener {
             dbAdapter.openDB();
             String[] columns = {DBAdapter.COL_ID, DBAdapter.COL_TITLE, DBAdapter.COL_HEADER, DBAdapter.COL_DEADLINE, DBAdapter.COL_MEMO, DBAdapter.COL_COLOR}; // DBのカラム：ID, ToDo名, 期限, メモ
             Cursor c = dbAdapter.getDB(columns);
-            c.move(position+1);
+            getPosition = position + 1;
+            c.move(getPosition);
             getId = c.getString(0);
             getDate = c.getString(3).substring(0,4) + "年" + c.getString(3).substring(4,6) + "月" + c.getString(3).substring(6,8) +"日";
             getTime = c.getString(3).substring(8,10) + ":" + c.getString(3).substring(10,12);
@@ -124,14 +128,32 @@ public class ToDoListFragment extends Fragment implements View.OnClickListener {
         switch (v.getId()) {
             case R.id.finBtn:
             case R.id.delBtn:
-                // dbAdapter = new DBAdapter(getActivity());
                 dbAdapter.openDB();
-                dbAdapter.selectDelete(String.valueOf(getId));
+                dbAdapter.selectDelete(getId);
                 dbAdapter.closeDB();
                 init("", "", "", "", "", toDoFresource.getColor(R.color.colorWhite),false);
                 listUpdate();
                 break;
             case R.id.editBtn:
+                Intent intent = new Intent(getActivity(), EditToDo.class);
+                dbAdapter.openDB();
+                String[] columns = {DBAdapter.COL_ID, DBAdapter.COL_TITLE, DBAdapter.COL_HEADER, DBAdapter.COL_DEADLINE, DBAdapter.COL_MEMO, DBAdapter.COL_COLOR}; // DBのカラム：ID, ToDo名, 期限, メモ
+                Cursor c = dbAdapter.getDB(columns);
+                c.move(getPosition);
+                intent.putExtra("id", c.getString(0));
+                intent.putExtra("title", c.getString(1));
+                intent.putExtra("header", c.getString(2));
+                intent.putExtra("year", Integer.valueOf((c.getString(3).substring(0,4))));
+                intent.putExtra("month", Integer.valueOf(c.getString(3).substring(4,6)));
+                intent.putExtra("day", Integer.valueOf(c.getString(3).substring(6,8)));
+                intent.putExtra("hour", Integer.valueOf(c.getString(3).substring(8,10)));
+                intent.putExtra("minute", Integer.valueOf(c.getString(3).substring(10,12)));
+                intent.putExtra("memo", c.getString(4));
+                intent.putExtra("color", Integer.valueOf(c.getString(5)));
+                c.close();
+                dbAdapter.closeDB();
+                editMode = true;
+                startActivity(intent);
                 break;
         }
     }

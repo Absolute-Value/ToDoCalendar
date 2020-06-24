@@ -2,9 +2,9 @@ package com.example.x3033076.finalextodocalendar;
 
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
-import android.content.res.Resources;
+import android.content.Intent;
 import android.database.Cursor;
-import android.graphics.drawable.ColorDrawable;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -24,15 +24,15 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
-public class AddToDo extends FragmentActivity implements View.OnClickListener, DatePickerDialog.OnDateSetListener, TimePickerDialog.OnTimeSetListener {
+public class EditToDo extends FragmentActivity implements View.OnClickListener, DatePickerDialog.OnDateSetListener, TimePickerDialog.OnTimeSetListener {
 
     TextView toDoTitleTextView, toDoHeaderTextView, toDoMemoTextView;
     Button dateButton, timeButton, cancelButton, addButton;
     static Button setColorButton;
-    static int color;
-    Resources addResource;
-    Date now;
+
+    String id, title, header, memo;
     int year, month, day, hour, minute;
+    static int color;
 
     private ArrayList<Map<String, Object>> list = new ArrayList<>();
 
@@ -49,38 +49,47 @@ public class AddToDo extends FragmentActivity implements View.OnClickListener, D
         toDoMemoTextView = findViewById(R.id.toDoMemoTV);
         cancelButton = findViewById(R.id.cancelBtn);
         addButton = findViewById(R.id.addBtn);
+        addButton.setText("編集");
 
         // リスナ登録
-        cancelButton.setOnClickListener(this);
         addButton.setOnClickListener(this);
+        cancelButton.setOnClickListener(this);
 
-        addResource = getResources();
-        color = addResource.getColor(R.color.colorLightBlue);
+        Intent intent = getIntent();
 
-        now = new Date();
-        year = now.getYear() + 1900;
-        month = now.getMonth() + 1;
-        day = now.getDate();
-        hour = now.getHours();
-        minute = now.getMinutes();
+        id = intent.getStringExtra("id");
+        title = intent.getStringExtra("title");
+        header = intent.getStringExtra("header");
+        color = intent.getIntExtra("color", Color.WHITE);
+        year = intent.getIntExtra("year", 1999);
+        month = intent.getIntExtra("month", 12);
+        day = intent.getIntExtra("day", 20);
+        hour = intent.getIntExtra("hour", 12);
+        minute = intent.getIntExtra("minute", 20);
+        memo = intent.getStringExtra("memo");
+        toDoTitleTextView.setText(title);
+        toDoHeaderTextView.setText(header);
+        setColorButton.setBackgroundColor(color);
         dateButton.setText(year + "/" + month + "/" + day);
         timeButton.setText(hour + ":" + String.format("%02d", minute));
+        toDoMemoTextView.setText(memo);
     }
 
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.addBtn:
-                String title = toDoTitleTextView.getText().toString();
-                String header = toDoHeaderTextView.getText().toString();
+                title = toDoTitleTextView.getText().toString();
+                header = toDoHeaderTextView.getText().toString();
                 String deadline = String.format("%04d", year) + String.format("%02d", month) + String.format("%02d", day)
                         + String.format("%02d", hour) + String.format("%02d", minute);
-                String memo = toDoMemoTextView.getText().toString();
+                memo = toDoMemoTextView.getText().toString();
                 if (title.equals("")) {
-                    Toast.makeText(AddToDo.this, "タイトルを入力してください", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(this, "タイトルを入力してください", Toast.LENGTH_SHORT).show();
                 } else {
                     DBAdapter dbAdapter = new DBAdapter(this);
                     dbAdapter.openDB();
+                    dbAdapter.selectDelete(id);
                     dbAdapter.saveDB(title, header, deadline, memo, color);
 
                     // DBのデータを取得
@@ -112,11 +121,12 @@ public class AddToDo extends FragmentActivity implements View.OnClickListener, D
                             new int[]{R.id.listTitleTV, R.id.listHeaderTV, R.id.listDateTV, R.id.listTimeTV, R.id.listColorTV});
                     ToDoListFragment.listV.setAdapter(adapter); //ListViewにアダプターをセット(=表示)
 
+                    ToDoListFragment.editMode = false;
                     finish(); // このアクティビティを終了させる
                 }
                 break;
             case R.id.cancelBtn:
-                finish(); // このアクティビティを終了させる
+                finish();
                 break;
         }
     }
