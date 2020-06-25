@@ -93,6 +93,7 @@ public class CalendarFragment extends Fragment {
                             Map<String,Object> map = new HashMap<>();
                             map.put("title", c.getString(0));
                             map.put("header", c.getString(1));
+                            map.put("date", c.getString(2).substring(0,8));
                             map.put("time", c.getString(2).substring(8,10) + ":" + c.getString(2).substring(10,12));
                             map.put("color", c.getString(3));
                             list.add(map);

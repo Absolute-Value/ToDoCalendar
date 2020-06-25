@@ -1,6 +1,7 @@
 package com.example.x3033076.finalextodocalendar;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -8,6 +9,7 @@ import android.widget.ListView;
 import android.widget.SimpleAdapter;
 import android.widget.TextView;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -36,19 +38,30 @@ public class MyAdapter extends SimpleAdapter {
 
         Map<String,Object> data = (Map<String,Object>)listView.getItemAtPosition(position);
 
-        TextView textA = (TextView) convertView.findViewById(Rid[0]);
+        Date now = new Date();
+        int nowDate = 10000*(now.getYear()+1900) + 100*(now.getMonth()+1) + now.getDate();
+        String date = (String)data.get(colm[2]);
+        int setDate = Integer.valueOf(date);
+        int nowTime = 60 * now.getHours() + now.getMinutes();
+        String time = (String)data.get(colm[3]);
+        int setTime = 60 * Integer.valueOf(time.substring(0,2)) + Integer.valueOf(time.substring(3,5));
+
+        TextView textA = convertView.findViewById(Rid[0]);
         textA.setText((String)data.get(colm[0]));
+        if(setDate<nowDate | (setDate==nowDate && setTime<nowTime)) textA.setTextColor(Color.RED);
 
-        TextView textB = (TextView) convertView.findViewById(Rid[1]);
+        TextView textB = convertView.findViewById(Rid[1]);
         textB.setText((String)data.get(colm[1]));
+        if(setDate<nowDate | (setDate==nowDate && setTime<nowTime)) textB.setTextColor(Color.RED);
 
-        TextView textC = (TextView) convertView.findViewById(Rid[2]);
+        TextView textC = convertView.findViewById(Rid[2]);
         textC.setText((String)data.get(colm[2]));
 
-        TextView textD = (TextView) convertView.findViewById(Rid[3]);
+        TextView textD = convertView.findViewById(Rid[3]);
         textD.setText((String)data.get(colm[3]));
+        if(setDate<nowDate | (setDate==nowDate && setTime<nowTime)) textD.setTextColor(Color.RED);
 
-        View viewA = (View) convertView.findViewById(Rid[4]);
+        View viewA = convertView.findViewById(Rid[4]);
         String colId = (String) data.get(colm[4]);
         viewA.setBackgroundColor(Integer.valueOf(colId));
 

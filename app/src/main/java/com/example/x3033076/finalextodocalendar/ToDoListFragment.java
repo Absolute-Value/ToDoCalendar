@@ -91,7 +91,8 @@ public class ToDoListFragment extends Fragment implements View.OnClickListener {
                 Map<String,Object> map = new HashMap<>();
                 map.put("title", c.getString(0));
                 map.put("header", c.getString(1));
-                map.put("date", listMonth + "月" + listDay + "日(" + week_name[calendar.get(Calendar.DAY_OF_WEEK)-1] + ")");
+                map.put("year", listYear);
+                map.put("date", c.getString(2).substring(0,8));
                 map.put("time", c.getString(2).substring(8,10) + ":" + c.getString(2).substring(10,12));
                 map.put("color", c.getString(3));
                 list.add(map);
@@ -100,7 +101,7 @@ public class ToDoListFragment extends Fragment implements View.OnClickListener {
         c.close();
         dbAdapter.closeDB(); // DBを閉じる
 
-        SimpleAdapter adapter = new MyAdapter(getActivity(), list, R.layout.list_layout, new String[]{"title", "header", "date", "time", "color"},
+        SimpleAdapter adapter = new MyAdapter(getActivity(), list, R.layout.list_layout, new String[]{"title", "header", "date", "time", "color", "year"},
                 new int[]{R.id.listTitleTV, R.id.listHeaderTV, R.id.listDateTV, R.id.listTimeTV, R.id.listColorTV});
         listV.setAdapter(adapter); //ListViewにアダプターをセット(=表示)
     }
