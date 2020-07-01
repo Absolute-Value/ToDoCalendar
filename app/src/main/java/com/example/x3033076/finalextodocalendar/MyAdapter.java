@@ -55,7 +55,8 @@ public class MyAdapter extends SimpleAdapter {
         if(setDate<nowDate | (setDate==nowDate && setTime<nowTime)) textB.setTextColor(Color.RED);
 
         TextView textC = convertView.findViewById(Rid[2]);
-        textC.setText((String)data.get(colm[2]));
+        String showDate = date.substring(4,6) + "月" + date.substring(6,8) + "日";
+        textC.setText(showDate);
 
         TextView textD = convertView.findViewById(Rid[3]);
         textD.setText((String)data.get(colm[3]));
