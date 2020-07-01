@@ -120,4 +120,11 @@ public class CalendarFragment extends Fragment {
                 new int[]{R.id.calListTitleTV, R.id.calListHeaderTV, R.id.calListTimeTV, R.id.calListTimeTV, R.id.calListColorTV});
         calList.setAdapter(adapter); //ListViewにアダプターをセット(=表示)
     }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        mCalendarAdapter = new CalendarAdapter(getContext());
+        calendarGridView.setAdapter(mCalendarAdapter);
+    }
 }
