@@ -13,6 +13,6 @@
         android:id="@+id/notificationBtn"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="通知削除"/>
+        android:text="テスト通知"/>
 
 </LinearLayout>

@@ -1,9 +1,15 @@
 package com.example.x3033076.finalextodocalendar;
 
+import android.app.AlarmManager;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
+import android.content.Context;
 import android.content.Intent;
 import android.content.res.Resources;
 import android.database.Cursor;
+import android.os.Build;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,6 +21,7 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.annotation.RequiresApi;
 import androidx.fragment.app.Fragment;
 
 import java.util.ArrayList;
@@ -39,6 +46,7 @@ public class ToDoListFragment extends Fragment implements View.OnClickListener {
     private List<Map<String,Object>> list = new ArrayList<>();
 
     private View toDoColorView, tdRootView;
+    @RequiresApi(api = Build.VERSION_CODES.KITKAT)
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater,
@@ -77,17 +85,21 @@ public class ToDoListFragment extends Fragment implements View.OnClickListener {
         String[] columns = {DBAdapter.COL_TITLE, DBAdapter.COL_HEADER, DBAdapter.COL_DEADLINE, DBAdapter.COL_COLOR, DBAdapter.COL_ID}; // DBのカラム：ToDo名
         Cursor c = dbAdapter.getDB(columns);
 
-        int listYear, listMonth, listDay, listHour, listMinute;
-        Calendar calendar = Calendar.getInstance();
+        int listId, listYear, listMonth, listDay, listHour, listMinute;
 
         list.clear(); // これがないとリスト増殖バグ発生
 
+        NotificationManager notificationManager = (NotificationManager) getActivity().getSystemService(Context.NOTIFICATION_SERVICE);
+        notificationManager.cancelAll();
+
         if (c.moveToFirst()) {
             do {
+                listId    = Integer.parseInt(c.getString(4));
                 listYear  = Integer.parseInt(c.getString(2).substring(0,4));
                 listMonth = Integer.parseInt(c.getString(2).substring(4,6));
                 listDay   = Integer.parseInt(c.getString(2).substring(6,8));
-                calendar.set(listYear, listMonth-1, listDay);
+                listHour  = Integer.parseInt(c.getString(2).substring(8,10));
+                listMinute= Integer.parseInt(c.getString(2).substring(10,12));
                 Map<String,Object> map = new HashMap<>();
                 map.put("title", c.getString(0));
                 map.put("header", c.getString(1));
@@ -95,6 +107,14 @@ public class ToDoListFragment extends Fragment implements View.OnClickListener {
                 map.put("date", c.getString(2).substring(0,8));
                 map.put("time", c.getString(2).substring(8,10) + ":" + c.getString(2).substring(10,12));
                 map.put("color", c.getString(3));
+                Calendar now = Calendar.getInstance();
+                Calendar cale = Calendar.getInstance();
+                now.setTimeInMillis(System.currentTimeMillis());
+                cale.setTimeInMillis(System.currentTimeMillis());
+                cale.set(listYear, listMonth-1, listDay, listHour, listMinute, 0);
+                if (now.getTimeInMillis() <= cale.getTimeInMillis()) {
+                    scheduleNotification(listId, c.getString(1), "「"+c.getString(0)+"」の時間です" ,cale);
+                }
                 list.add(map);
             } while (c.moveToNext());
         }
@@ -184,5 +204,17 @@ public class ToDoListFragment extends Fragment implements View.OnClickListener {
         finishButton.setEnabled(bool);
         editButton.setEnabled(bool);
         deleteButton.setEnabled(bool);
+    }
+
+    private void scheduleNotification(int id, String header, String title, Calendar calendar){
+        Intent notificationIntent = new Intent(getActivity(), AlarmReceiver.class);
+        notificationIntent.putExtra(AlarmReceiver.NOTIFICATION_ID, id);
+        notificationIntent.putExtra(AlarmReceiver.NOTIFICATION_HEADER, header);
+        notificationIntent.putExtra(AlarmReceiver.NOTIFICATION_TITLE, title);
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(getActivity(), id, notificationIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+
+        AlarmManager alarmManager = (AlarmManager)getActivity().getSystemService(Context.ALARM_SERVICE);
+        alarmManager.setExact(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), pendingIntent);
+        Log.d("set","通知セット"+calendar.getTime());
     }
 }

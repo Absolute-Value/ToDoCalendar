@@ -108,8 +108,6 @@ public class CalendarAdapter extends BaseAdapter {
         c.close();
         dbAdapter.closeDB(); // DBを閉じる
 
-        // convertView.setBackgroundColor(Color.WHITE);
-
         int colorId;
         switch (mDateManager.getDayOfWeek(dateArray.get(position))){ //日曜日を赤、土曜日を青に
             case 1:

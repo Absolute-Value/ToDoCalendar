@@ -5,9 +5,9 @@ import android.app.NotificationManager;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.util.Log;
 
 public class AlarmReceiver extends BroadcastReceiver {
-
     public static String NOTIFICATION_ID = "notificationId";
     public static String NOTIFICATION_HEADER = "header";
     public static String NOTIFICATION_TITLE = "title";
@@ -16,6 +16,7 @@ public class AlarmReceiver extends BroadcastReceiver {
     public void onReceive(Context context, Intent intent) {
         NotificationManager notificationManager = (NotificationManager)context.getSystemService(Context.NOTIFICATION_SERVICE);
         int id = intent.getIntExtra(NOTIFICATION_ID, 0);
+        Log.d("id",""+id);
         String header = intent.getStringExtra(NOTIFICATION_HEADER);
         String title = intent.getStringExtra(NOTIFICATION_TITLE);
         notificationManager.notify(id, buildNotification(context, header, title));
@@ -25,7 +26,7 @@ public class AlarmReceiver extends BroadcastReceiver {
         Notification.Builder builder = new Notification.Builder(context);
         builder.setContentTitle(header)
                 .setContentText(title)
-                .setSmallIcon(android.R.drawable.sym_def_app_icon);
+                .setSmallIcon(android.R.drawable.star_on);
 
         return builder.build();
     }
