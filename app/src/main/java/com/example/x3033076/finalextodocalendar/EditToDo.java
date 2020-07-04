@@ -89,28 +89,7 @@ public class EditToDo extends FragmentActivity implements View.OnClickListener, 
                     dbAdapter.openDB();
                     dbAdapter.selectDelete(id);
                     dbAdapter.saveDB(title, header, deadline, memo, color);
-
-                    // DBのデータを取得
-                    String[] columns = {DBAdapter.COL_TITLE, DBAdapter.COL_HEADER, DBAdapter.COL_DEADLINE, DBAdapter.COL_COLOR}; // DBのカラム：ToDo名
-                    Cursor c = dbAdapter.getDB(columns);
-
-                    if (c.moveToFirst()) {
-                        do {
-                            Map<String, Object> map = new HashMap<>();
-                            map.put("title", c.getString(0));
-                            map.put("header", c.getString(1));
-                            map.put("date", c.getString(2).substring(0,8));
-                            map.put("time", c.getString(2).substring(8, 10) + ":" + c.getString(2).substring(10, 12));
-                            map.put("color", c.getString(3));
-                            list.add(map);
-                        } while (c.moveToNext());
-                    }
-                    c.close();
-                    dbAdapter.closeDB(); // DBを閉じる
-
-                    SimpleAdapter adapter = new MyAdapter(this, list, R.layout.list_layout, new String[]{"title", "header", "date", "time", "color"},
-                            new int[]{R.id.listTitleTV, R.id.listHeaderTV, R.id.listDateTV, R.id.listTimeTV, R.id.listColorTV});
-                    ToDoListFragment.listV.setAdapter(adapter); //ListViewにアダプターをセット(=表示)
+                    dbAdapter.closeDB();
 
                     ToDoListFragment.editMode = false;
                     finish(); // このアクティビティを終了させる

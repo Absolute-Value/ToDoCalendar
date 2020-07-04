@@ -30,7 +30,7 @@ import java.util.Map;
 
 public class ToDoListFragment extends Fragment implements View.OnClickListener {
 
-    static ListView listV;
+    ListView listV;
     Button finishButton, editButton, deleteButton;
     TextView toDoDate, toDoHeader, toDoTitle, toDoTime, toDoMemo;
 
@@ -176,7 +176,7 @@ public class ToDoListFragment extends Fragment implements View.OnClickListener {
     @Override
     public void onResume() {
         super.onResume();
-
+        listUpdate();
     }
 
     void init(String dateText, String headerText, String titleText, String timeText, String memoText, int colorId, boolean bool) {
