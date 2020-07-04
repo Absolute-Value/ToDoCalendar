@@ -50,7 +50,7 @@ public class SettingsFragment extends Fragment implements View.OnClickListener {
 
     private void scheduleNotification(String header, String title, Calendar calendar){
         Intent notificationIntent = new Intent(getActivity(), AlarmReceiver.class);
-        notificationIntent.putExtra(AlarmReceiver.NOTIFICATION_ID, 1);
+        notificationIntent.putExtra(AlarmReceiver.NOTIFICATION_ID, 0);
         notificationIntent.putExtra(AlarmReceiver.NOTIFICATION_HEADER, header);
         notificationIntent.putExtra(AlarmReceiver.NOTIFICATION_TITLE, title);
         PendingIntent pendingIntent = PendingIntent.getBroadcast(getActivity(), 0, notificationIntent, PendingIntent.FLAG_UPDATE_CURRENT);
