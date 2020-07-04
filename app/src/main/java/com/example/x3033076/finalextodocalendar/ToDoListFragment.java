@@ -1,9 +1,14 @@
 package com.example.x3033076.finalextodocalendar;
 
+import android.app.AlarmManager;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
+import android.content.Context;
 import android.content.Intent;
 import android.content.res.Resources;
 import android.database.Cursor;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -74,10 +79,10 @@ public class ToDoListFragment extends Fragment implements View.OnClickListener {
         dbAdapter.openDB(); // DBの読み込み(読み書きの方)
 
         // DBのデータを取得
-        String[] columns = {DBAdapter.COL_TITLE, DBAdapter.COL_HEADER, DBAdapter.COL_DEADLINE, DBAdapter.COL_COLOR}; // DBのカラム：ToDo名
+        String[] columns = {DBAdapter.COL_TITLE, DBAdapter.COL_HEADER, DBAdapter.COL_DEADLINE, DBAdapter.COL_COLOR, DBAdapter.COL_ID}; // DBのカラム：ToDo名
         Cursor c = dbAdapter.getDB(columns);
 
-        int listYear, listMonth, listDay;
+        int listYear, listMonth, listDay, listHour, listMinute;
         Calendar calendar = Calendar.getInstance();
 
         list.clear(); // これがないとリスト増殖バグ発生
@@ -115,8 +120,11 @@ public class ToDoListFragment extends Fragment implements View.OnClickListener {
             Cursor c = dbAdapter.getDB(columns);
             getPosition = position + 1;
             c.move(getPosition);
+            Calendar calendar = Calendar.getInstance();
+            calendar.set(Integer.valueOf(c.getString(3).substring(0,4)),
+                    Integer.valueOf(c.getString(3).substring(4,6))-1, Integer.valueOf(c.getString(3).substring(6,8)));
             getId = c.getString(0);
-            getDate = c.getString(3).substring(0,4) + "年" + c.getString(3).substring(4,6) + "月" + c.getString(3).substring(6,8) +"日";
+            getDate = c.getString(3).substring(0,4) + "年" + c.getString(3).substring(4,6) + "月" + c.getString(3).substring(6,8) +"日("+week_name[calendar.get(Calendar.DAY_OF_WEEK)-1]+")";
             getTime = c.getString(3).substring(8,10) + ":" + c.getString(3).substring(10,12);
             init(getDate, c.getString(2), c.getString(1), getTime, c.getString(4), Integer.valueOf(c.getString(5)),true);
             c.close();
@@ -163,6 +171,12 @@ public class ToDoListFragment extends Fragment implements View.OnClickListener {
     public void onPause() {
         super.onPause();
         init("", "", "", "", "", toDoFresource.getColor(R.color.colorWhite), false);
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+
     }
 
     void init(String dateText, String headerText, String titleText, String timeText, String memoText, int colorId, boolean bool) {

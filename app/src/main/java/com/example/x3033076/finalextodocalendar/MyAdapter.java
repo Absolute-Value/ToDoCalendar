@@ -9,6 +9,7 @@ import android.widget.ListView;
 import android.widget.SimpleAdapter;
 import android.widget.TextView;
 
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -55,7 +56,9 @@ public class MyAdapter extends SimpleAdapter {
         if(setDate<nowDate | (setDate==nowDate && setTime<nowTime)) textB.setTextColor(Color.RED);
 
         TextView textC = convertView.findViewById(Rid[2]);
-        String showDate = date.substring(4,6) + "月" + date.substring(6,8) + "日";
+        Calendar calendar = Calendar.getInstance();
+        calendar.set(Integer.valueOf(date.substring(0,4)), Integer.valueOf(date.substring(4,6))-1, Integer.valueOf(date.substring(6,8)));
+        String showDate = date.substring(4,6) + "月" + date.substring(6,8) + "日(" +ToDoListFragment.week_name[calendar.get(Calendar.DAY_OF_WEEK)-1] + ")";
         textC.setText(showDate);
 
         TextView textD = convertView.findViewById(Rid[3]);

@@ -19,7 +19,6 @@ import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.FragmentActivity;
 
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -95,15 +94,8 @@ public class EditToDo extends FragmentActivity implements View.OnClickListener, 
                     String[] columns = {DBAdapter.COL_TITLE, DBAdapter.COL_HEADER, DBAdapter.COL_DEADLINE, DBAdapter.COL_COLOR}; // DBのカラム：ToDo名
                     Cursor c = dbAdapter.getDB(columns);
 
-                    int listYear, listMonth, listDay;
-                    Calendar calendar = Calendar.getInstance();
-
                     if (c.moveToFirst()) {
                         do {
-                            listYear = Integer.parseInt(c.getString(2).substring(0, 4));
-                            listMonth = Integer.parseInt(c.getString(2).substring(4, 6));
-                            listDay = Integer.parseInt(c.getString(2).substring(6, 8));
-                            calendar.set(listYear, listMonth - 1, listDay);
                             Map<String, Object> map = new HashMap<>();
                             map.put("title", c.getString(0));
                             map.put("header", c.getString(1));
