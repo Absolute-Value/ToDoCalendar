@@ -22,4 +22,9 @@
     <string name="cancel">キャンセル</string>
     <string name="add">追加</string>
     <string name="notification_setting">通知設定</string>
+    <string name="day_before_2">2日前</string>
+    <string name="day_before_1">1日前</string>
+    <string name="hour_before_3">3時間前</string>
+    <string name="hour_before_1">1時間前</string>
+    <string name="just_before">締切時間</string>
 </resources>
