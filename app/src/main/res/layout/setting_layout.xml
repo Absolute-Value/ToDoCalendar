@@ -30,7 +30,7 @@
             android:text="@string/day_before_2"/>
 
         <Switch
-            android:id="@+id/day2swtch"
+            android:id="@+id/day2beforeSW"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"/>
 
@@ -53,7 +53,7 @@
             android:text="@string/day_before_1"/>
 
         <Switch
-            android:id="@+id/day1switch"
+            android:id="@+id/day1beforeSW"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"/>
 
@@ -76,7 +76,7 @@
             android:text="@string/hour_before_3"/>
 
         <Switch
-            android:id="@+id/hour3swtch"
+            android:id="@+id/hour3beforeSW"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"/>
 
@@ -99,7 +99,7 @@
             android:text="@string/hour_before_1"/>
 
         <Switch
-            android:id="@+id/hour1switch"
+            android:id="@+id/hour1beforeSW"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"/>
 
@@ -122,7 +122,7 @@
             android:text="@string/just_before"/>
 
         <Switch
-            android:id="@+id/justSwitch"
+            android:id="@+id/justTimeSW"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"/>
 
