@@ -68,16 +68,21 @@ public class SettingsFragment extends Fragment implements View.OnClickListener, 
                 switch (count) {
                     case 0:
                         day2beforeSwitch.setChecked(loadBool(c.getInt(0)));
+                        ToDoListFragment.day2SwitchBool = loadBool(c.getInt(0));
                         break;
                     case 1:
                         day1beforeSwitch.setChecked(loadBool(c.getInt(0)));
+                        ToDoListFragment.day1SwitchBool = loadBool(c.getInt(0));
                         break;
                     case 2:
                         hour3beforeSwitch.setChecked(loadBool(c.getInt(0)));
+                        ToDoListFragment.hour3SwitchBool = loadBool(c.getInt(0));
                     case 3:
                         hour1beforeSwitch.setChecked(loadBool(c.getInt(0)));
+                        ToDoListFragment.hour1SwitchBool = loadBool(c.getInt(0));
                     default:
                         justSwitch.setChecked(loadBool(c.getInt(0)));
+                        ToDoListFragment.justSwitchBool = loadBool(c.getInt(0));
                         break;
                 }
                 count++;
@@ -117,10 +122,15 @@ public class SettingsFragment extends Fragment implements View.OnClickListener, 
         db = dbHelper.getWritableDatabase();
         db.delete(DB_TABLE, null, null);
         saveDB(day2beforeSwitch.isChecked());
+        ToDoListFragment.day2SwitchBool = day2beforeSwitch.isChecked();
         saveDB(day1beforeSwitch.isChecked());
+        ToDoListFragment.day1SwitchBool = day1beforeSwitch.isChecked();
         saveDB(hour3beforeSwitch.isChecked());
+        ToDoListFragment.hour3SwitchBool = hour3beforeSwitch.isChecked();
         saveDB(hour1beforeSwitch.isChecked());
+        ToDoListFragment.hour1SwitchBool = hour1beforeSwitch.isChecked();
         saveDB(justSwitch.isChecked());
+        ToDoListFragment.justSwitchBool = justSwitch.isChecked();
         db.close();
     }
 

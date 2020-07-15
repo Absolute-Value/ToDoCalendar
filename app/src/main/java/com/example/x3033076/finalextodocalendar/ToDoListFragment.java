@@ -40,6 +40,11 @@ public class ToDoListFragment extends Fragment implements View.OnClickListener {
     String getId, getDate, getTime;
     static String[] week_name = {"日", "月", "火", "水", "木", "金", "土"};
     static Boolean editMode = false;
+    static Boolean day2SwitchBool = false;
+    static Boolean day1SwitchBool = false;
+    static Boolean hour3SwitchBool = false;
+    static Boolean hour1SwitchBool = false;
+    static Boolean justSwitchBool = false;
 
     private Resources toDoFresource;
     private DBAdapter dbAdapter; // DBAdapter
@@ -112,8 +117,25 @@ public class ToDoListFragment extends Fragment implements View.OnClickListener {
                 now.setTimeInMillis(System.currentTimeMillis());
                 cale.setTimeInMillis(System.currentTimeMillis());
                 cale.set(listYear, listMonth-1, listDay, listHour, listMinute, 0);
-                if (now.getTimeInMillis() <= cale.getTimeInMillis()) {
+                if (justSwitchBool && now.getTimeInMillis() <= cale.getTimeInMillis()) {
                     scheduleNotification(listId, c.getString(1), "「"+c.getString(0)+"」の時間です" ,cale);
+                }
+                cale.add(Calendar.HOUR_OF_DAY, -1);
+                if (hour1SwitchBool && now.getTimeInMillis() <= cale.getTimeInMillis()) {
+                    scheduleNotification(listId+10000, c.getString(1), "「"+c.getString(0)+"」の1時間前です" ,cale);
+                }
+                cale.add(Calendar.HOUR_OF_DAY, -2);
+                if (hour3SwitchBool && now.getTimeInMillis() <= cale.getTimeInMillis()) {
+                    scheduleNotification(listId+20000, c.getString(1), "「"+c.getString(0)+"」の3時間前です" ,cale);
+                }
+                cale.add(Calendar.HOUR_OF_DAY, 3);
+                cale.add(Calendar.DATE, -1);
+                if (day1SwitchBool && now.getTimeInMillis() <= cale.getTimeInMillis()) {
+                    scheduleNotification(listId+30000, c.getString(1), "「"+c.getString(0)+"」の1日前です" ,cale);
+                }
+                cale.add(Calendar.DATE, -1);
+                if (day2SwitchBool && now.getTimeInMillis() <= cale.getTimeInMillis()) {
+                    scheduleNotification(listId+40000, c.getString(1), "「"+c.getString(0)+"」の2日前です" ,cale);
                 }
                 list.add(map);
             } while (c.moveToNext());
