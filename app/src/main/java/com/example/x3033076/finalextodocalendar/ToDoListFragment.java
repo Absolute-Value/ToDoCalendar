@@ -119,6 +119,7 @@ public class ToDoListFragment extends Fragment implements View.OnClickListener {
                 cale.set(listYear, listMonth-1, listDay, listHour, listMinute, 0);
                 if (justSwitchBool && now.getTimeInMillis() <= cale.getTimeInMillis()) {
                     scheduleNotification(listId, c.getString(1), "「"+c.getString(0)+"」の時間です" ,cale);
+                    Log.d("time",now.getTime()+"/"+cale.getTime());
                 }
                 cale.add(Calendar.HOUR_OF_DAY, -1);
                 if (hour1SwitchBool && now.getTimeInMillis() <= cale.getTimeInMillis()) {
@@ -236,7 +237,12 @@ public class ToDoListFragment extends Fragment implements View.OnClickListener {
         PendingIntent pendingIntent = PendingIntent.getBroadcast(getActivity(), id, notificationIntent, PendingIntent.FLAG_UPDATE_CURRENT);
 
         AlarmManager alarmManager = (AlarmManager)getActivity().getSystemService(Context.ALARM_SERVICE);
-        alarmManager.setExact(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), pendingIntent);
-        Log.d("set","通知セット"+calendar.getTime());
+        if (Build.VERSION.SDK_INT >= 23) {
+            alarmManager.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), pendingIntent);
+        } else if (Build.VERSION.SDK_INT >= 19) {
+            alarmManager.setExact(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), pendingIntent);
+        } else {
+            alarmManager.set(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), pendingIntent);
+        }
     }
 }

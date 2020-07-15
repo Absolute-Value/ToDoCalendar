@@ -8,6 +8,7 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -102,19 +103,25 @@ public class SettingsFragment extends Fragment implements View.OnClickListener, 
                 calendar.setTimeInMillis(System.currentTimeMillis());
                 calendar.add(Calendar.SECOND, 5);
                 scheduleNotification("ToDoリスト付きカレンダー", "5秒後に届く通知です", calendar);
-                Log.d("time",""+calendar.getTime());
+                Log.d("time", "" + calendar.getTime());
         }
     }
 
     private void scheduleNotification(String header, String title, Calendar calendar){
-        Intent notificationIntent = new Intent(getActivity(), AlarmReceiver.class);
-        notificationIntent.putExtra(AlarmReceiver.NOTIFICATION_ID, 0);
-        notificationIntent.putExtra(AlarmReceiver.NOTIFICATION_HEADER, header);
-        notificationIntent.putExtra(AlarmReceiver.NOTIFICATION_TITLE, title);
+        Intent notificationIntent = new Intent(getActivity(), AlarmReceiver.class)
+                .putExtra(AlarmReceiver.NOTIFICATION_ID, 0)
+                .putExtra(AlarmReceiver.NOTIFICATION_HEADER, header)
+                .putExtra(AlarmReceiver.NOTIFICATION_TITLE, title);
         PendingIntent pendingIntent = PendingIntent.getBroadcast(getActivity(), 0, notificationIntent, PendingIntent.FLAG_UPDATE_CURRENT);
 
-        AlarmManager alarmManager = (AlarmManager)getActivity().getSystemService(Context.ALARM_SERVICE);
-        alarmManager.setExact(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), pendingIntent);
+        AlarmManager alarmManager = (AlarmManager) getActivity().getSystemService(Context.ALARM_SERVICE);
+        if (Build.VERSION.SDK_INT >= 23) {
+            alarmManager.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), pendingIntent);
+        } else if (Build.VERSION.SDK_INT >= 19) {
+            alarmManager.setExact(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), pendingIntent);
+        } else {
+            alarmManager.set(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), pendingIntent);
+        }
     }
 
     @Override
