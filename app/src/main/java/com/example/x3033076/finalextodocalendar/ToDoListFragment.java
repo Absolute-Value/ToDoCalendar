@@ -60,16 +60,16 @@ public class ToDoListFragment extends Fragment implements View.OnClickListener {
 
         tdRootView = inflater.inflate(R.layout.todo_list_layout, container, false);
 
-        listV = (ListView) tdRootView.findViewById(R.id.toDoLV);
-        toDoColorView = (View) tdRootView.findViewById(R.id.toDoColorV);
-        toDoDate = (TextView) tdRootView.findViewById(R.id.dateTV);
-        toDoHeader = (TextView) tdRootView.findViewById(R.id.headerTV);
-        toDoTitle = (TextView) tdRootView.findViewById(R.id.titleTV);
-        toDoTime = (TextView) tdRootView.findViewById(R.id.timeTV);
-        toDoMemo = (TextView) tdRootView.findViewById(R.id.memoTV);
-        finishButton = (Button) tdRootView.findViewById(R.id.finBtn);
-        editButton = (Button) tdRootView.findViewById(R.id.editBtn);
-        deleteButton = (Button) tdRootView.findViewById(R.id.delBtn);
+        listV = tdRootView.findViewById(R.id.toDoLV);
+        toDoColorView = tdRootView.findViewById(R.id.toDoColorV);
+        toDoDate = tdRootView.findViewById(R.id.dateTV);
+        toDoHeader = tdRootView.findViewById(R.id.headerTV);
+        toDoTitle = tdRootView.findViewById(R.id.titleTV);
+        toDoTime = tdRootView.findViewById(R.id.timeTV);
+        toDoMemo = tdRootView.findViewById(R.id.memoTV);
+        finishButton = tdRootView.findViewById(R.id.finBtn);
+        editButton = tdRootView.findViewById(R.id.editBtn);
+        deleteButton = tdRootView.findViewById(R.id.delBtn);
 
         listV.setOnItemClickListener(new ListItemClickListener());
         finishButton.setOnClickListener(this);
@@ -178,29 +178,29 @@ public class ToDoListFragment extends Fragment implements View.OnClickListener {
                 dbAdapter.openDB();
                 dbAdapter.selectDelete(getId);
                 dbAdapter.closeDB();
-                init("", "", "", "", "", toDoFresource.getColor(R.color.colorWhite),false);
-                listUpdate();
+                Intent updateIntent = new Intent(getActivity(), Update.class);
+                startActivity(updateIntent);
                 break;
             case R.id.editBtn:
-                Intent intent = new Intent(getActivity(), EditToDo.class);
+                Intent editIntent = new Intent(getActivity(), EditToDo.class);
                 dbAdapter.openDB();
                 String[] columns = {DBAdapter.COL_ID, DBAdapter.COL_TITLE, DBAdapter.COL_HEADER, DBAdapter.COL_DEADLINE, DBAdapter.COL_MEMO, DBAdapter.COL_COLOR}; // DBのカラム：ID, ToDo名, 期限, メモ
                 Cursor c = dbAdapter.getDB(columns);
                 c.move(getPosition);
-                intent.putExtra("id", c.getString(0));
-                intent.putExtra("title", c.getString(1));
-                intent.putExtra("header", c.getString(2));
-                intent.putExtra("year", Integer.valueOf((c.getString(3).substring(0,4))));
-                intent.putExtra("month", Integer.valueOf(c.getString(3).substring(4,6)));
-                intent.putExtra("day", Integer.valueOf(c.getString(3).substring(6,8)));
-                intent.putExtra("hour", Integer.valueOf(c.getString(3).substring(8,10)));
-                intent.putExtra("minute", Integer.valueOf(c.getString(3).substring(10,12)));
-                intent.putExtra("memo", c.getString(4));
-                intent.putExtra("color", Integer.valueOf(c.getString(5)));
+                editIntent.putExtra("id", c.getString(0));
+                editIntent.putExtra("title", c.getString(1));
+                editIntent.putExtra("header", c.getString(2));
+                editIntent.putExtra("year", Integer.valueOf((c.getString(3).substring(0,4))));
+                editIntent.putExtra("month", Integer.valueOf(c.getString(3).substring(4,6)));
+                editIntent.putExtra("day", Integer.valueOf(c.getString(3).substring(6,8)));
+                editIntent.putExtra("hour", Integer.valueOf(c.getString(3).substring(8,10)));
+                editIntent.putExtra("minute", Integer.valueOf(c.getString(3).substring(10,12)));
+                editIntent.putExtra("memo", c.getString(4));
+                editIntent.putExtra("color", Integer.valueOf(c.getString(5)));
                 c.close();
                 dbAdapter.closeDB();
                 editMode = true;
-                startActivity(intent);
+                startActivity(editIntent);
                 break;
         }
     }
