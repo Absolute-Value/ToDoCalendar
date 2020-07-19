@@ -8,6 +8,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AbsListView;
 import android.widget.BaseAdapter;
+import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -28,11 +29,13 @@ public class CalendarAdapter extends BaseAdapter {
     static List<String> dayArray = new ArrayList();
 
     private static class ViewHolder { //カスタムセルを拡張したらここでWigetを定義
-        public LinearLayout aroundLayout;
+        public FrameLayout aroundLayout;
         public LinearLayout insideLayout;
         public TextView dateText;
         public TextView toDoShowText1;
         public TextView toDoShowText2;
+        public TextView toDoShowText3;
+        public TextView toDoOtherText;
     }
 
     public CalendarAdapter(Context context){
@@ -58,6 +61,8 @@ public class CalendarAdapter extends BaseAdapter {
             holder.dateText = convertView.findViewById(R.id.cellTV);
             holder.toDoShowText1 = convertView.findViewById(R.id.toDoShowTV1);
             holder.toDoShowText2 = convertView.findViewById(R.id.toDoShowTV2);
+            holder.toDoShowText3 = convertView.findViewById(R.id.toDoShowTV3);
+            holder.toDoOtherText = convertView.findViewById(R.id.toDoOtherTV);
             convertView.setTag(holder);
         } else {
             holder = (ViewHolder)convertView.getTag();
@@ -83,6 +88,10 @@ public class CalendarAdapter extends BaseAdapter {
         holder.toDoShowText1.setBackgroundColor(Color.WHITE);
         holder.toDoShowText2.setText("");
         holder.toDoShowText2.setBackgroundColor(Color.WHITE);
+        holder.toDoShowText3.setText("");
+        holder.toDoShowText3.setBackgroundColor(Color.WHITE);
+        holder.toDoOtherText.setText("");
+        holder.toDoOtherText.setBackgroundColor(Color.WHITE);
         int count = 0;
 
         if (c.moveToFirst()) {
@@ -92,16 +101,21 @@ public class CalendarAdapter extends BaseAdapter {
                         case 0:
                             holder.toDoShowText1.setText(c.getString(0));
                             holder.toDoShowText1.setBackgroundColor(Integer.valueOf(c.getString(2)));
-                            count++;
                             break;
                         case 1:
                             holder.toDoShowText2.setText(c.getString(0));
                             holder.toDoShowText2.setBackgroundColor(Integer.valueOf(c.getString(2)));
-                            count++;
+                            break;
+                        case 2:
+                            holder.toDoShowText3.setText(c.getString(0));
+                            holder.toDoShowText3.setBackgroundColor(Integer.valueOf(c.getString(2)));
                             break;
                         default:
+                            holder.toDoOtherText.setText("+"+(count-2));
+                            holder.toDoOtherText.setBackgroundColor(Color.argb(180,255,200,200));
                             break;
                     }
+                    count++;
                 }
             } while (c.moveToNext());
         }

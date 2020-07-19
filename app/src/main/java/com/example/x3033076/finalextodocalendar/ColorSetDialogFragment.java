@@ -60,7 +60,7 @@ public class ColorSetDialogFragment extends DialogFragment implements View.OnCli
         int setColor;
         switch (view.getId()) {
             case R.id.setRedBtn:
-                setColor = resource.getColor(R.color.colorRed);
+                setColor = resource.getColor(R.color.colorARed);
                 break;
             case R.id.setYellowBtn:
                 setColor = resource.getColor(R.color.colorYellow);
