@@ -91,7 +91,7 @@ public class CalendarAdapter extends BaseAdapter {
         holder.toDoShowText3.setText("");
         holder.toDoShowText3.setBackgroundColor(Color.WHITE);
         holder.toDoOtherText.setText("");
-        holder.toDoOtherText.setBackgroundColor(Color.WHITE);
+        holder.toDoOtherText.setBackgroundColor(Color.argb(0,255,255,255));
         int count = 0;
 
         if (c.moveToFirst()) {
