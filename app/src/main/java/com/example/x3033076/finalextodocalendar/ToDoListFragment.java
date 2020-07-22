@@ -178,6 +178,8 @@ public class ToDoListFragment extends Fragment implements View.OnClickListener {
                 dbAdapter.openDB();
                 dbAdapter.selectDelete(getId);
                 dbAdapter.closeDB();
+                init("", "", "", "", "", toDoFresource.getColor(R.color.colorWhite),false);
+                listUpdate();
                 Intent updateIntent = new Intent(getActivity(), Update.class);
                 startActivity(updateIntent);
                 break;
