@@ -47,7 +47,7 @@ public class AlarmReceiver extends BroadcastReceiver {
         Notification.Builder builder = new Notification.Builder(context)
                 .setContentTitle(header)
                 .setContentText(title)
-                .setSmallIcon(android.R.drawable.star_on);
+                .setSmallIcon(R.drawable.ic_action_name);
 
         return builder.build();
     }
