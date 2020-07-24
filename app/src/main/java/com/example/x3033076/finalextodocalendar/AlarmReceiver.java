@@ -36,7 +36,7 @@ public class AlarmReceiver extends BroadcastReceiver {
     @RequiresApi(api = Build.VERSION_CODES.O)
     private Notification buildNotification(Context context, int id, String header, String title) {
         Notification.Builder builder = new Notification.Builder(context)
-                .setSmallIcon(android.R.drawable.star_on)
+                .setSmallIcon(R.drawable.ic_action_name)
                 .setContentTitle(header)
                 .setContentText(title)
                 .setChannelId("id_"+id);
