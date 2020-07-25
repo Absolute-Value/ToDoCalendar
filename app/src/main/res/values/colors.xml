@@ -3,6 +3,8 @@
     <color name="colorPrimary">#099</color>
     <color name="colorPrimaryDark">#055</color>
     <color name="colorAccent">#FE0</color>
+    <color name="colorClear">#0FFF</color>
+    <color name="colorToDoBack">#FB5</color>
     <color name="colorRed">#F00</color>
     <color name="colorARed">#AF00</color>
     <color name="colorYellow">#AFB5</color>

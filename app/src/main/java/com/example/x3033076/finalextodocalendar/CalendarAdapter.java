@@ -85,11 +85,11 @@ public class CalendarAdapter extends BaseAdapter {
         Cursor c = dbAdapter.getDB(columns);
         SimpleDateFormat dFormat = new SimpleDateFormat("yyyyMMdd");
         holder.toDoShowText1.setText("");
-        holder.toDoShowText1.setBackgroundColor(Color.WHITE);
+        holder.toDoShowText1.setBackgroundColor(Color.argb(0,255,255,255));
         holder.toDoShowText2.setText("");
-        holder.toDoShowText2.setBackgroundColor(Color.WHITE);
+        holder.toDoShowText2.setBackgroundColor(Color.argb(0,255,255,255));
         holder.toDoShowText3.setText("");
-        holder.toDoShowText3.setBackgroundColor(Color.WHITE);
+        holder.toDoShowText3.setBackgroundColor(Color.argb(0,255,255,255));
         holder.toDoOtherText.setText("");
         holder.toDoOtherText.setBackgroundColor(Color.argb(0,255,255,255));
         int count = 0;
