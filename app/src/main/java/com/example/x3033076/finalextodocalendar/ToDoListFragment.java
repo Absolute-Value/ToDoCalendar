@@ -71,13 +71,14 @@ public class ToDoListFragment extends Fragment implements View.OnClickListener {
         editButton = tdRootView.findViewById(R.id.editBtn);
         deleteButton = tdRootView.findViewById(R.id.delBtn);
 
+        // リスナ登録
         listV.setOnItemClickListener(new ListItemClickListener());
         finishButton.setOnClickListener(this);
         editButton.setOnClickListener(this);
         deleteButton.setOnClickListener(this);
 
         toDoFresource = tdRootView.getResources();
-        listUpdate();
+        listUpdate(); // ToDoリスト更新
 
         return tdRootView;
     }
@@ -87,7 +88,7 @@ public class ToDoListFragment extends Fragment implements View.OnClickListener {
         dbAdapter.openDB(); // DBの読み込み(読み書きの方)
 
         // DBのデータを取得
-        String[] columns = {DBAdapter.COL_TITLE, DBAdapter.COL_HEADER, DBAdapter.COL_DEADLINE, DBAdapter.COL_COLOR, DBAdapter.COL_ID}; // DBのカラム：ToDo名
+        String[] columns = {DBAdapter.COL_TITLE, DBAdapter.COL_HEADER, DBAdapter.COL_DEADLINE, DBAdapter.COL_COLOR, DBAdapter.COL_ID}; // DBのカラム：ToDo名, 項目名, 色, id
         Cursor c = dbAdapter.getDB(columns);
 
         int listId, listYear, listMonth, listDay, listHour, listMinute;
@@ -95,7 +96,7 @@ public class ToDoListFragment extends Fragment implements View.OnClickListener {
         list.clear(); // これがないとリスト増殖バグ発生
 
         NotificationManager notificationManager = (NotificationManager) getActivity().getSystemService(Context.NOTIFICATION_SERVICE);
-        notificationManager.cancelAll();
+        notificationManager.cancelAll(); // すべての通知を削除
 
         if (c.moveToFirst()) {
             do {
@@ -117,31 +118,30 @@ public class ToDoListFragment extends Fragment implements View.OnClickListener {
                 now.setTimeInMillis(System.currentTimeMillis());
                 cale.setTimeInMillis(System.currentTimeMillis());
                 cale.set(listYear, listMonth-1, listDay, listHour, listMinute, 0);
-                if (justSwitchBool && now.getTimeInMillis() <= cale.getTimeInMillis()) {
-                    scheduleNotification(listId, c.getString(1), "「"+c.getString(0)+"」の時間です" ,cale);
-                    Log.d("time",now.getTime()+"/"+cale.getTime());
+                if (justSwitchBool && now.getTimeInMillis() <= cale.getTimeInMillis()) { // まだ設定時間がきてなかったら
+                    scheduleNotification(listId, c.getString(1), "「"+c.getString(0)+"」の時間です" ,cale); // 締め切り時間の通知を追加
                 }
-                cale.add(Calendar.HOUR_OF_DAY, -1);
-                if (hour1SwitchBool && now.getTimeInMillis() <= cale.getTimeInMillis()) {
-                    scheduleNotification(listId+10000, c.getString(1), "「"+c.getString(0)+"」の1時間前です" ,cale);
+                cale.add(Calendar.HOUR_OF_DAY, -1); // カレンダーの時間を1時間引く
+                if (hour1SwitchBool && now.getTimeInMillis() <= cale.getTimeInMillis()) { // まだ設定時間がきてなかったら
+                    scheduleNotification(listId+10000, c.getString(1), "「"+c.getString(0)+"」の1時間前です" ,cale); // 1時間前の通知を追加
                 }
-                cale.add(Calendar.HOUR_OF_DAY, -2);
-                if (hour3SwitchBool && now.getTimeInMillis() <= cale.getTimeInMillis()) {
-                    scheduleNotification(listId+20000, c.getString(1), "「"+c.getString(0)+"」の3時間前です" ,cale);
+                cale.add(Calendar.HOUR_OF_DAY, -2); // カレンダーの時間を2時間引く
+                if (hour3SwitchBool && now.getTimeInMillis() <= cale.getTimeInMillis()) { // まだ設定時間がきてなかったら
+                    scheduleNotification(listId+20000, c.getString(1), "「"+c.getString(0)+"」の3時間前です" ,cale); // 3時間前の通知を追加
                 }
-                cale.add(Calendar.HOUR_OF_DAY, 3);
-                cale.add(Calendar.DATE, -1);
-                if (day1SwitchBool && now.getTimeInMillis() <= cale.getTimeInMillis()) {
-                    scheduleNotification(listId+30000, c.getString(1), "「"+c.getString(0)+"」の1日前です" ,cale);
+                cale.add(Calendar.HOUR_OF_DAY, 3); // カレンダーの時間を3時間足す
+                cale.add(Calendar.DATE, -1); // カレンダーの日付を1日引く
+                if (day1SwitchBool && now.getTimeInMillis() <= cale.getTimeInMillis()) { // まだ設定時間がきてなかったら
+                    scheduleNotification(listId+30000, c.getString(1), "「"+c.getString(0)+"」の1日前です" ,cale); // 1日前の通知を追加
                 }
-                cale.add(Calendar.DATE, -1);
-                if (day2SwitchBool && now.getTimeInMillis() <= cale.getTimeInMillis()) {
-                    scheduleNotification(listId+40000, c.getString(1), "「"+c.getString(0)+"」の2日前です" ,cale);
+                cale.add(Calendar.DATE, -1); // カレンダーの日付を1日引く
+                if (day2SwitchBool && now.getTimeInMillis() <= cale.getTimeInMillis()) { // まだ設定時間がきてなかったら
+                    scheduleNotification(listId+40000, c.getString(1), "「"+c.getString(0)+"」の2日前です" ,cale); // 2日前の通知を追加
                 }
-                list.add(map);
+                list.add(map); // リストにマップを追加
             } while (c.moveToNext());
         }
-        c.close();
+        c.close(); // カーソルを閉じる
         dbAdapter.closeDB(); // DBを閉じる
 
         SimpleAdapter adapter = new MyAdapter(getActivity(), list, R.layout.list_layout, new String[]{"title", "header", "date", "time", "color", "year"},
@@ -153,42 +153,44 @@ public class ToDoListFragment extends Fragment implements View.OnClickListener {
 
         @Override
         public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
-            dbAdapter.openDB();
-            String[] columns = {DBAdapter.COL_ID, DBAdapter.COL_TITLE, DBAdapter.COL_HEADER, DBAdapter.COL_DEADLINE, DBAdapter.COL_MEMO, DBAdapter.COL_COLOR}; // DBのカラム：ID, ToDo名, 期限, メモ
-            Cursor c = dbAdapter.getDB(columns);
+            dbAdapter.openDB();// DBの読み込み(読み書きの方)
+            // DBのデータを取得
+            String[] columns = {DBAdapter.COL_ID, DBAdapter.COL_TITLE, DBAdapter.COL_HEADER, DBAdapter.COL_DEADLINE, DBAdapter.COL_MEMO, DBAdapter.COL_COLOR}; // DBのカラム：ID, ToDo名, 期限, メモ, 色
+            Cursor c = dbAdapter.getDB(columns); // カーソル
             getPosition = position + 1;
-            c.move(getPosition);
-            Calendar calendar = Calendar.getInstance();
+            c.move(getPosition); // カーソルを移動
+            Calendar calendar = Calendar.getInstance(); // カレンダーのインスタンス生成
             calendar.set(Integer.valueOf(c.getString(3).substring(0,4)),
                     Integer.valueOf(c.getString(3).substring(4,6))-1, Integer.valueOf(c.getString(3).substring(6,8)));
             getId = c.getString(0);
             getDate = c.getString(3).substring(0,4) + "年" + c.getString(3).substring(4,6) + "月" + c.getString(3).substring(6,8) +"日("+week_name[calendar.get(Calendar.DAY_OF_WEEK)-1]+")";
             getTime = c.getString(3).substring(8,10) + ":" + c.getString(3).substring(10,12);
             init(getDate, c.getString(2), c.getString(1), getTime, c.getString(4), Integer.valueOf(c.getString(5)),true);
-            c.close();
-            dbAdapter.closeDB();
+            c.close(); // カーソル終了
+            dbAdapter.closeDB(); // DBを閉じる
         }
     }
 
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
-            case R.id.finBtn:
-            case R.id.delBtn:
-                dbAdapter.openDB();
-                dbAdapter.selectDelete(getId);
-                dbAdapter.closeDB();
+            case R.id.finBtn: // "完了"ボタンを押した時
+            case R.id.delBtn: // "削除"ボタンを押した時
+                dbAdapter.openDB(); // DBの読み込み(読み書きの方)
+                dbAdapter.selectDelete(getId); // DBを選択削除
+                dbAdapter.closeDB(); // DBを閉じる
                 init("", "", "", "", "", toDoFresource.getColor(R.color.colorWhite),false);
-                listUpdate();
-                Intent updateIntent = new Intent(getActivity(), Update.class);
-                startActivity(updateIntent);
+                listUpdate(); // ToDoリスト更新
+                Intent updateIntent = new Intent(getActivity(), Update.class); // Update のインテントを作成
+                startActivity(updateIntent); // Activity展開(onResumeを呼び出すため)
                 break;
-            case R.id.editBtn:
-                Intent editIntent = new Intent(getActivity(), EditToDo.class);
-                dbAdapter.openDB();
+            case R.id.editBtn: // "編集"ボタンを押した時
+                Intent editIntent = new Intent(getActivity(), EditToDo.class); // EditToDo のインテントを作成
+                dbAdapter.openDB();// DBの読み込み(読み書きの方)
                 String[] columns = {DBAdapter.COL_ID, DBAdapter.COL_TITLE, DBAdapter.COL_HEADER, DBAdapter.COL_DEADLINE, DBAdapter.COL_MEMO, DBAdapter.COL_COLOR}; // DBのカラム：ID, ToDo名, 期限, メモ
-                Cursor c = dbAdapter.getDB(columns);
-                c.move(getPosition);
+                Cursor c = dbAdapter.getDB(columns); // カーソル
+                c.move(getPosition); // カーソル移動
+                // EditToDoのインテントに引き渡す値
                 editIntent.putExtra("id", c.getString(0));
                 editIntent.putExtra("title", c.getString(1));
                 editIntent.putExtra("header", c.getString(2));
@@ -199,27 +201,28 @@ public class ToDoListFragment extends Fragment implements View.OnClickListener {
                 editIntent.putExtra("minute", Integer.valueOf(c.getString(3).substring(10,12)));
                 editIntent.putExtra("memo", c.getString(4));
                 editIntent.putExtra("color", Integer.valueOf(c.getString(5)));
-                c.close();
-                dbAdapter.closeDB();
-                editMode = true;
-                startActivity(editIntent);
+
+                c.close(); // カーソル終了
+                dbAdapter.closeDB(); // DBを閉じる
+                editMode = true; // 編集モードをオンにする
+                startActivity(editIntent); // Activity展開
                 break;
         }
     }
 
     @Override
-    public void onPause() {
+    public void onPause() { // 一時停止時
         super.onPause();
         init("", "", "", "", "", toDoFresource.getColor(R.color.colorWhite), false);
     }
 
     @Override
-    public void onResume() {
+    public void onResume() { // 再開時
         super.onResume();
-        listUpdate();
+        listUpdate(); // ToDoリストの更新
     }
 
-    void init(String dateText, String headerText, String titleText, String timeText, String memoText, int colorId, boolean bool) {
+    void init(String dateText, String headerText, String titleText, String timeText, String memoText, int colorId, boolean bool) { // 配置物の初期化
         toDoDate.setText(dateText);
         toDoHeader.setText(headerText);
         toDoTitle.setText(titleText);
@@ -232,19 +235,20 @@ public class ToDoListFragment extends Fragment implements View.OnClickListener {
     }
 
     private void scheduleNotification(int id, String header, String title, Calendar calendar){
-        Intent notificationIntent = new Intent(getActivity(), AlarmReceiver.class);
+        Intent notificationIntent = new Intent(getActivity(), AlarmReceiver.class); // AlarmReceiver にインテントを作成
+        // AlarmReceiver のインテントに引き渡す値
         notificationIntent.putExtra(AlarmReceiver.NOTIFICATION_ID, id);
         notificationIntent.putExtra(AlarmReceiver.NOTIFICATION_HEADER, header);
         notificationIntent.putExtra(AlarmReceiver.NOTIFICATION_TITLE, title);
-        PendingIntent pendingIntent = PendingIntent.getBroadcast(getActivity(), id, notificationIntent, PendingIntent.FLAG_UPDATE_CURRENT);
 
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(getActivity(), id, notificationIntent, PendingIntent.FLAG_UPDATE_CURRENT);
         AlarmManager alarmManager = (AlarmManager)getActivity().getSystemService(Context.ALARM_SERVICE);
-        if (Build.VERSION.SDK_INT >= 23) {
-            alarmManager.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), pendingIntent);
-        } else if (Build.VERSION.SDK_INT >= 19) {
-            alarmManager.setExact(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), pendingIntent);
-        } else {
-            alarmManager.set(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), pendingIntent);
+        if (Build.VERSION.SDK_INT >= 23) { // SDKのバージョンが23以上なら
+            alarmManager.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), pendingIntent); // アラームセット
+        } else if (Build.VERSION.SDK_INT >= 19) { // SDKのバージョンが19以上23未満なら
+            alarmManager.setExact(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), pendingIntent); // アラームセット
+        } else { // SDKのバージョンが19未満なら
+            alarmManager.set(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), pendingIntent); // アラームセット
         }
     }
 }

@@ -82,69 +82,69 @@ public class CalendarAdapter extends BaseAdapter {
         DBAdapter dbAdapter = new DBAdapter(convertView.getContext());
         dbAdapter.openDB(); // DBの読み込み(読み書きの方)
         String[] columns = {DBAdapter.COL_TITLE, DBAdapter.COL_DEADLINE, DBAdapter.COL_COLOR}; // DBのカラム：ToDo名
-        Cursor c = dbAdapter.getDB(columns);
+        Cursor c = dbAdapter.getDB(columns); // カーソル
         SimpleDateFormat dFormat = new SimpleDateFormat("yyyyMMdd");
         holder.toDoShowText1.setText("");
-        holder.toDoShowText1.setBackgroundColor(Color.argb(0,255,255,255));
+        holder.toDoShowText1.setBackgroundColor(Color.argb(0,255,255,255)); // 背景色を透明に設定
         holder.toDoShowText2.setText("");
-        holder.toDoShowText2.setBackgroundColor(Color.argb(0,255,255,255));
+        holder.toDoShowText2.setBackgroundColor(Color.argb(0,255,255,255)); // 背景色を透明に設定
         holder.toDoShowText3.setText("");
-        holder.toDoShowText3.setBackgroundColor(Color.argb(0,255,255,255));
+        holder.toDoShowText3.setBackgroundColor(Color.argb(0,255,255,255)); // 背景色を透明に設定
         holder.toDoOtherText.setText("");
-        holder.toDoOtherText.setBackgroundColor(Color.argb(0,255,255,255));
+        holder.toDoOtherText.setBackgroundColor(Color.argb(0,255,255,255)); // 背景色を透明に設定
         int count = 0;
 
         if (c.moveToFirst()) {
             do {
                 if(c.getString(1).substring(0,8).equals(dFormat.format(dateArray.get(position)))) {
                     switch (count) {
-                        case 0:
-                            holder.toDoShowText1.setText(c.getString(0));
-                            holder.toDoShowText1.setBackgroundColor(Integer.valueOf(c.getString(2)));
+                        case 0: // 一つ目の予定
+                            holder.toDoShowText1.setText(c.getString(0)); // ToDo名を表示
+                            holder.toDoShowText1.setBackgroundColor(Integer.valueOf(c.getString(2))); // 背景色を設定
                             break;
-                        case 1:
-                            holder.toDoShowText2.setText(c.getString(0));
-                            holder.toDoShowText2.setBackgroundColor(Integer.valueOf(c.getString(2)));
+                        case 1: // 二つ目の予定
+                            holder.toDoShowText2.setText(c.getString(0)); // ToDo名を表示
+                            holder.toDoShowText2.setBackgroundColor(Integer.valueOf(c.getString(2))); // 背景色を設定
                             break;
-                        case 2:
-                            holder.toDoShowText3.setText(c.getString(0));
-                            holder.toDoShowText3.setBackgroundColor(Integer.valueOf(c.getString(2)));
+                        case 2: // 三つ目の予定
+                            holder.toDoShowText3.setText(c.getString(0)); // ToDo名を表示
+                            holder.toDoShowText3.setBackgroundColor(Integer.valueOf(c.getString(2))); // 背景色を設定
                             break;
-                        default:
-                            holder.toDoOtherText.setText("+"+(count-2));
-                            holder.toDoOtherText.setBackgroundColor(Color.argb(180,255,200,200));
+                        default: // 予定が四つ以上だったら
+                            holder.toDoOtherText.setText("+"+(count-2)); // 表示しきれないToDo数を表示
+                            holder.toDoOtherText.setBackgroundColor(Color.argb(180,255,200,200)); // 背景色を設定
                             break;
                     }
                     count++;
                 }
             } while (c.moveToNext());
         }
-        c.close();
+        c.close(); // カーソルを閉じる
         dbAdapter.closeDB(); // DBを閉じる
 
         int colorId;
         switch (mDateManager.getDayOfWeek(dateArray.get(position))){ //日曜日を赤、土曜日を青に
-            case 1:
+            case 1: // 日曜日
                 if (mDateManager.isCurrentMonth(dateArray.get(position))) colorId = Color.RED; // 当月のセル
                 else colorId = Color.argb(80, 255,0,0);               // 当月以外のセル
                 break;
-            case 7:
+            case 7: // 土曜日
                 if (mDateManager.isCurrentMonth(dateArray.get(position))) colorId = Color.BLUE; // 当月のセル
                 else colorId = Color.argb(80, 0,0,255);               // 当月以外のセル
                 break;
-            default:
+            default: // 平日
                 if (mDateManager.isCurrentMonth(dateArray.get(position))) colorId = Color.BLACK; // 当月のセル
                 else colorId = Color.argb(80, 0,0,0);                  // 当月以外のセル
                 break;
         }
         holder.dateText.setTextColor(colorId);
-        if (dFormat.format(Calendar.getInstance().getTime()).equals(dFormat.format(dateArray.get(position)))) {
-            holder.aroundLayout.setBackgroundColor(Color.rgb(255,187,85));
-            holder.dateText.setBackgroundColor(Color.rgb(255,187,85));
-            holder.dateText.setTextColor(Color.WHITE);
-        } else {
-            holder.aroundLayout.setBackgroundColor(Color.WHITE);
-            holder.dateText.setBackgroundColor(Color.WHITE);
+        if (dFormat.format(Calendar.getInstance().getTime()).equals(dFormat.format(dateArray.get(position)))) { // 当日のセルだったら
+            holder.aroundLayout.setBackgroundColor(Color.rgb(255,187,85)); // セルの周りの色を設定
+            holder.dateText.setBackgroundColor(Color.rgb(255,187,85)); // セルの日付の色を設定
+            holder.dateText.setTextColor(Color.WHITE); // セルの日付の色を白に設定
+        } else { // それ以外の時
+            holder.aroundLayout.setBackgroundColor(Color.WHITE); // セルの周りの色を設定
+            holder.dateText.setBackgroundColor(Color.WHITE); // セルの日付の色を設定
         }
 
         return convertView;

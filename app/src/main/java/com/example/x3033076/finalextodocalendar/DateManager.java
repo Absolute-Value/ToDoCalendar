@@ -41,10 +41,10 @@ public class DateManager {
     public boolean isCurrentMonth(Date date){ //当月かどうか確認
         SimpleDateFormat format = new SimpleDateFormat("yyyy"+"年"+"MM"+"月", Locale.US);
         String currentMonth = format.format(mCalendar.getTime());
-        if (currentMonth.equals(format.format(date))){
-            return true;
-        }else {
-            return false;
+        if (currentMonth.equals(format.format(date))){ // 当月だったら
+            return true; // 真を返す
+        }else { // 当月以外なら
+            return false; // 偽を返す
         }
     }
 

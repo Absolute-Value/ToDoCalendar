@@ -13,10 +13,13 @@ public class TimePickerDialogFragment extends DialogFragment implements TimePick
     @NonNull
     @Override
     public Dialog onCreateDialog(@Nullable Bundle savedInstanceState) {
-        int hour = getArguments().getInt("hour");
-        int minute = getArguments().getInt("minute");
-        if(ToDoListFragment.editMode) return new TimePickerDialog(getActivity(), (EditToDo)getActivity(), hour, minute, true);
-        else return new TimePickerDialog(getActivity(), (AddToDo)getActivity(), hour, minute, true);
+        int hour = getArguments().getInt("hour"); // 引き渡された時間を読み込む
+        int minute = getArguments().getInt("minute"); // 引き渡された分を読み込む
+        if(ToDoListFragment.editMode) { // 編集モードだったら
+            return new TimePickerDialog(getActivity(), (EditToDo)getActivity(), hour, minute, true); // EditToDoに渡す
+        } else { // 編集モードじゃなかったら
+            return new TimePickerDialog(getActivity(), (AddToDo)getActivity(), hour, minute, true); // AddToDoに渡す
+        }
     }
 
     @Override

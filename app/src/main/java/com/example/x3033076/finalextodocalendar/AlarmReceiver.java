@@ -18,37 +18,35 @@ public class AlarmReceiver extends BroadcastReceiver {
 
     @Override
     public void onReceive(Context context, Intent intent) {
-        int id = intent.getIntExtra(NOTIFICATION_ID, 0);
-        String header = intent.getStringExtra(NOTIFICATION_HEADER);
-        String title = intent.getStringExtra(NOTIFICATION_TITLE);
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+        int id = intent.getIntExtra(NOTIFICATION_ID, 0); // 引き渡されたidを変数に保存
+        String header = intent.getStringExtra(NOTIFICATION_HEADER); // 引き渡されたヘッダーを変数に保存
+        String title = intent.getStringExtra(NOTIFICATION_TITLE); // 引き渡されたタイトルを変数に保存
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) { // SDkがOreo以上だったら
             NotificationChannel mChannel = new NotificationChannel("id_"+id, "name_"+id, NotificationManager.IMPORTANCE_HIGH);
             NotificationManager mNotificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
             mNotificationManager.createNotificationChannel(mChannel);
             mNotificationManager.notify(id , buildNotification(context, id, header, title));
-        } else {
+        } else { // SDkがOreo未満だったら
             NotificationManager notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
-            Log.d("id", "" + id);
             notificationManager.notify(id, buildNotification(context, header, title));
         }
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.O)
+    @RequiresApi(api = Build.VERSION_CODES.O) // Oreo以上
     private Notification buildNotification(Context context, int id, String header, String title) {
         Notification.Builder builder = new Notification.Builder(context)
-                .setSmallIcon(R.drawable.ic_action_name)
-                .setContentTitle(header)
-                .setContentText(title)
-                .setChannelId("id_"+id);
+                .setSmallIcon(R.drawable.ic_action_name) // アイコンセット
+                .setContentTitle(header) // ヘッダーセット
+                .setContentText(title) // タイトルセット
+                .setChannelId("id_"+id); // id設定
         return builder.build();
     }
 
     private Notification buildNotification(Context context, String header, String title) {
         Notification.Builder builder = new Notification.Builder(context)
-                .setContentTitle(header)
-                .setContentText(title)
-                .setSmallIcon(R.drawable.ic_action_name);
-
+                .setContentTitle(header) // ヘッダーセット
+                .setContentText(title) // タイトルセット
+                .setSmallIcon(R.drawable.ic_action_name); // アイコンセット
         return builder.build();
     }
 }

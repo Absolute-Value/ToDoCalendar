@@ -20,7 +20,7 @@ public class ColorSetDialogFragment extends DialogFragment implements View.OnCli
     public Dialog onCreateDialog(Bundle savedInstanceState) {
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
 
-        LayoutInflater inflater = (LayoutInflater) getActivity().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        LayoutInflater inflater = (LayoutInflater) getActivity().getSystemService(Context.LAYOUT_INFLATER_SERVICE); // レイアウトを関連付け
         View content = inflater.inflate(R.layout.color_set_layout, null);
         setRed = content.findViewById(R.id.setRedBtn);
         setYellow = content.findViewById(R.id.setYellowBtn);
@@ -45,7 +45,7 @@ public class ColorSetDialogFragment extends DialogFragment implements View.OnCli
         setDeepPurple.setOnClickListener(this);
         setPurple.setOnClickListener(this);
 
-        resource = getResources();
+        resource = getResources(); // colors.xml を使えるようにする
 
         builder.setView(content);
 
@@ -91,9 +91,9 @@ public class ColorSetDialogFragment extends DialogFragment implements View.OnCli
                 break;
         }
         if (ToDoListFragment.editMode) EditToDo.setColorButton.setBackgroundColor(setColor); // ToDoを編集中だったら
-        else AddToDo.setColorButton.setBackgroundColor(setColor);
+        else AddToDo.setColorButton.setBackgroundColor(setColor); // ToDoを新規作成中だったら
         if (ToDoListFragment.editMode) EditToDo.color = setColor; // ToDoを編集中だったら
-        else AddToDo.color = setColor;
+        else AddToDo.color = setColor; // ToDoを新規作成中だったら
 
 
     }

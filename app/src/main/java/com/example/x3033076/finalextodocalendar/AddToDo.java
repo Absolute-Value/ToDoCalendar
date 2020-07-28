@@ -22,15 +22,15 @@ public class AddToDo extends FragmentActivity implements View.OnClickListener, D
     TextView toDoTitleTextView, toDoHeaderTextView, toDoMemoTextView;
     Button dateButton, timeButton, cancelButton, addButton;
     static Button setColorButton;
-    static int color;
-    Resources addResource;
+    static int color; // 色番号を保存しおく変数
+    Resources addResource; // colors.xml を使えるようにする
     Date now;
     int year, month, day, hour, minute;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.todo_add_layout);
+        setContentView(R.layout.todo_add_layout); // レイアウトを関連付け
 
         toDoTitleTextView = findViewById(R.id.toDoTitleTV);
         toDoHeaderTextView = findViewById(R.id.toDoHeaderTV);
@@ -45,35 +45,35 @@ public class AddToDo extends FragmentActivity implements View.OnClickListener, D
         cancelButton.setOnClickListener(this);
         addButton.setOnClickListener(this);
 
-        addResource = getResources();
-        color = addResource.getColor(R.color.colorLightBlue);
+        addResource = getResources(); // colors.xml を使えるようにする
+        color = addResource.getColor(R.color.colorLightBlue); // 色の初期値を水色に
 
         now = new Date();
-        year = now.getYear() + 1900;
-        month = now.getMonth() + 1;
-        day = now.getDate();
-        hour = now.getHours();
-        minute = now.getMinutes();
-        dateButton.setText(year + "/" + month + "/" + day);
-        timeButton.setText(hour + ":" + String.format("%02d", minute));
+        year = now.getYear() + 1900; // 年を保存しおく変数
+        month = now.getMonth() + 1; // 月を保存しおく変数
+        day = now.getDate(); // 日を保存しおく変数
+        hour = now.getHours(); // 時を保存しおく変数
+        minute = now.getMinutes(); // 分を保存しおく変数
+        dateButton.setText(year + "/" + month + "/" + day); // 日付ボタンに日付をセット
+        timeButton.setText(hour + ":" + String.format("%02d", minute)); // 時間ボタンに時間をセット
     }
 
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.addBtn: // "追加" ボタンが押されたら
-                String title = toDoTitleTextView.getText().toString();
-                String header = toDoHeaderTextView.getText().toString();
+                String title = toDoTitleTextView.getText().toString(); // タイトルの内容を変数に保存
+                String header = toDoHeaderTextView.getText().toString(); // 項目名の内容を変数に保存
                 String deadline = String.format("%04d", year) + String.format("%02d", month) + String.format("%02d", day)
-                        + String.format("%02d", hour) + String.format("%02d", minute);
-                String memo = toDoMemoTextView.getText().toString();
-                if (title.equals("")) {
-                    Toast.makeText(AddToDo.this, "タイトルを入力してください", Toast.LENGTH_SHORT).show();
-                } else {
+                        + String.format("%02d", hour) + String.format("%02d", minute); // 締め切りの内容を変数に保存
+                String memo = toDoMemoTextView.getText().toString(); // メモの内容を変数に保存
+                if (title.equals("")) { // タイトルが入力してなかったら
+                    Toast.makeText(AddToDo.this, "タイトルを入力してください", Toast.LENGTH_SHORT).show(); // トーストでタイトルを入力するよう呼びかけ
+                } else { // タイトルが入力してあったら
                     DBAdapter dbAdapter = new DBAdapter(this);
-                    dbAdapter.openDB();
-                    dbAdapter.saveDB(title, header, deadline, memo, color);
-                    dbAdapter.closeDB();
+                    dbAdapter.openDB(); // DBの読み書き
+                    dbAdapter.saveDB(title, header, deadline, memo, color); // 内容をデータベースに保存
+                    dbAdapter.closeDB(); // DBを閉じる
                     finish(); // このアクティビティを終了させる
                 }
                 break;
@@ -100,7 +100,7 @@ public class AddToDo extends FragmentActivity implements View.OnClickListener, D
 
     public void showDatePickerDialog(View v) {
         DialogFragment newFragment = new DatePickerDialogFragment(); // フラグメントの作成
-        Bundle args = new Bundle();
+        Bundle args = new Bundle(); // バンドル生成
         args.putInt("year", year); // 引数 "年"
         args.putInt("month", month); // 引数 "月"
         args.putInt("day", day); // 引数 "日"
@@ -110,7 +110,7 @@ public class AddToDo extends FragmentActivity implements View.OnClickListener, D
 
     public void showTimePickerDialog(View v) {
         DialogFragment newFragment = new TimePickerDialogFragment(); // フラグメントの作成
-        Bundle args = new Bundle();
+        Bundle args = new Bundle(); // バンドル生成
         args.putInt("hour", hour); // 引数 "時"
         args.putInt("minute", minute); // 引数 "分"
         newFragment.setArguments(args); // 引数をフラグメントにセット

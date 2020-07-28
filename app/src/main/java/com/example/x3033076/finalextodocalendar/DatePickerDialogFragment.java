@@ -14,12 +14,15 @@ public class DatePickerDialogFragment extends DialogFragment implements DatePick
     @NonNull
     @Override
     public Dialog onCreateDialog(@Nullable Bundle savedInstanceState) {
-        int year = getArguments().getInt("year");
-        int month = getArguments().getInt("month")-1;
-        int day = getArguments().getInt("day");
+        int year = getArguments().getInt("year"); // 引き渡された年を読み込む
+        int month = getArguments().getInt("month")-1; // 引き渡された月を読み込む
+        int day = getArguments().getInt("day"); // 引き渡された日を読み込む
 
-        if(ToDoListFragment.editMode) return new DatePickerDialog(getActivity(), (EditToDo)getActivity(),  year, month, day);
-        else return new DatePickerDialog(getActivity(), (AddToDo)getActivity(),  year, month, day);
+        if(ToDoListFragment.editMode) { // 編集モードだったら
+            return new DatePickerDialog(getActivity(), (EditToDo)getActivity(),  year, month, day); // EditToDoに渡す
+        } else { // 編集モードじゃなかったら
+            return new DatePickerDialog(getActivity(), (AddToDo)getActivity(),  year, month, day); // AddToDoに渡す
+        }
     }
 
     @Override

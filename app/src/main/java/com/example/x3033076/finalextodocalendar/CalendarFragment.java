@@ -110,7 +110,7 @@ public class CalendarFragment extends Fragment {
     }
 
     @Override
-    public void onPause() {
+    public void onPause() { // 一時停止時
         super.onPause();
         calDate.setText("");
         list.clear();
@@ -120,7 +120,7 @@ public class CalendarFragment extends Fragment {
     }
 
     @Override
-    public void onResume() {
+    public void onResume() { // 再開時
         super.onResume();
         mCalendarAdapter = new CalendarAdapter(getContext());
         calendarGridView.setAdapter(mCalendarAdapter);

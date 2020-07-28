@@ -51,6 +51,7 @@ public class SettingsFragment extends Fragment implements View.OnClickListener, 
         justSwitch = setRootView.findViewById(R.id.justTimeSW);
         notificationButton = setRootView.findViewById(R.id.notificationBtn);
 
+        // リスナ登録
         day2beforeSwitch.setOnCheckedChangeListener(this);
         day1beforeSwitch.setOnCheckedChangeListener(this);
         hour3beforeSwitch.setOnCheckedChangeListener(this);
@@ -98,12 +99,11 @@ public class SettingsFragment extends Fragment implements View.OnClickListener, 
     @Override
     public void onClick(View view) {
         switch (view.getId()) {
-            case R.id.notificationBtn:
-                Calendar calendar = Calendar.getInstance();
-                calendar.setTimeInMillis(System.currentTimeMillis());
-                calendar.add(Calendar.SECOND, 5);
-                scheduleNotification("ToDoリスト付きカレンダー", "5秒後に届く通知です", calendar);
-                Log.d("time", "" + calendar.getTime());
+            case R.id.notificationBtn: // "テスト通知"ボタンを押したら
+                Calendar calendar = Calendar.getInstance(); // カレンダーのインスタンスを生成
+                calendar.setTimeInMillis(System.currentTimeMillis()); // 現在のミリ秒取得
+                calendar.add(Calendar.SECOND, 5); // カレンダーに5秒追加
+                scheduleNotification("ToDoリスト付きカレンダー", "5秒後に届く通知です", calendar); // 通知登録
         }
     }
 
@@ -183,7 +183,7 @@ public class SettingsFragment extends Fragment implements View.OnClickListener, 
         }
     }
 
-    private boolean loadBool(int getBool) {
+    private boolean loadBool(int getBool) { // SQLiteから真偽を読み出すメソッド
         boolean getBol = false;
         if (getBool==1) getBol = true;
         return getBol;

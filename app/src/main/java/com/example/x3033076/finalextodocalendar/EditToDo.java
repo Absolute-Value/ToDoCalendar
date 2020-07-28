@@ -35,7 +35,7 @@ public class EditToDo extends FragmentActivity implements View.OnClickListener, 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.todo_add_layout);
+        setContentView(R.layout.todo_add_layout); // レイアウトを関連付け
 
         toDoTitleTextView = findViewById(R.id.toDoTitleTV);
         toDoHeaderTextView = findViewById(R.id.toDoHeaderTV);

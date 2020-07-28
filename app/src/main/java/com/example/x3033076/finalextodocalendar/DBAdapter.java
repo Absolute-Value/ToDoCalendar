@@ -65,7 +65,6 @@ public class DBAdapter {
     }
 
     public void selectDelete(String position) {
-
         db.beginTransaction(); // トランザクション開始
         try {
             db.delete(DB_TABLE, COL_ID + "=?", new String[]{position});
